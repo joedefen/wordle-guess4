@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+
+def get_overlap(a, b):
+    rv = 0
+    for char in a:
+        if char in b:
+            rv += 1
+    return rv
+
+def get_keys():
+    file_path = "wordlist.txt"
+    words = []
+    keys = {}
+
+    with open(file_path, "r") as file:
+        file_contents = file.read()
+        words = file_contents.split()
+    print(f'#words = {len(words)}')
+
+    for word in words:
+        key = ''.join(sorted(set([char for char in word])))
+        if key in keys:
+            keys[key].append(word)
+        else:
+            keys[key] = [word]
+    print(f'#keys = {len(keys)}')
+    return(keys)
+
+def get_most_overlap(keys, exclude=''):
+    percent = .60
+    bests = set()
+    best_overlap = 0
+
+    for key in keys:
+        if len(key) != 5:
+            continue
+        if get_overlap(key, exclude) > 0:
+            continue
+        overlap = 0
+        for other in keys:
+            overlap += get_overlap(key, other)
+        if overlap > best_overlap:
+            best_overlap = overlap
+            bests.add((overlap, key))
+            for best in list(bests):
+                if best[0] < percent * best_overlap:
+                    bests.discard(best)
+
+    # return [(round(best[0]/best_overlap, 2), best[1]) for best in bests]
+    return [(best[0]//100, best[1]) for best in bests]
+
+def main():
+    keys = get_keys()
+
+    ex = ['aiou', 'ou', 'o'] # 3.88 brens tidal gucky whomp
+    ex = ['eiou', 'ou', 'o'] # 3.91 snarl debit gucky whomp
+    # ex = ['eiou', 'ou', 'u'] # none
+    ex = ['yiou', 'iu', 'u'] # 3.86 stare block dying whump **132,213,298,363
+    ex = ['yiou', 'yi', 'i'] # 3.82 saber clonk dumpy fight
+    ex = ['aeiu', 'ou', 'u'] # 3.86 rotls began dicky whump
+    ex = ['aeiou', 'aiou', 'a'] # 3.96 byrls nempt guido whack
+    print(f'excludes={ex}')
+
+    keys0 = get_most_overlap(keys, exclude=ex[0])
+    for pct0, key0 in keys0:
+        row0 = f'{pct0}: {key0} {keys[key0]}'
+
+        keys1 = get_most_overlap(keys, exclude=key0 + ex[1])
+        for pct1, key1 in keys1:
+            row1 = f'  {pct0+pct1}: {key1} {keys[key1]}'
+
+            keys2 = get_most_overlap(keys, exclude=key0 + key1 + ex[2])
+            for pct2, key2 in keys2:
+                row2 = f'    {pct0+pct1+pct2}: {key2} {keys[key2]}'
+
+                keys3 = get_most_overlap(keys, exclude=key0 + key1 + key2)
+                for pct3, key3 in keys3:
+                    print(f'{row0}\n{row1}\n{row2}\n' +
+                          f'      {pct0+pct1+pct2+pct3}: {key3} {keys[key3]}')
+
+main()
