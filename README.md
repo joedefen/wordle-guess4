@@ -6,7 +6,7 @@ To find the "best" four ordered guesses to solve a NY Times **wordle** puzzle.
 To find those four guesses efficiently, we use some heuristics including:
 * each guess must add 5 more letters to the attempted letter set
 * the six possible vowels must be split 2-2-1-1 or 3-1-1-1, and we give the algorithm intuitively good sets of vowels (rather than trying them all).
-* we use two list of 5-letter words:
+* we use two lists of 5-letter words:
     * all the legal answers to **wordle**.
     * all the legal guesses to **wordle**.
 * when the vowels are common, we restrict the attempted words to the legal answers; otherwise the legal guesses
@@ -35,11 +35,11 @@ To help decode the output, here is the last line (and the top overall score) and
 2052 [308, 516, 697, 839] ['carle', 'lacer', 'recal', 'clear'] ['bigot'] ['kynds'] ['whump']
 ```
 NOTE:
-* `2052` is total score (sum of the last three intermediate scores).
-* `[308, 516, 697, 839]` are the intermediate scores; 271 is percent*10 or 30.8% of the letters in the legal answers after one guess.
-* `['carle', 'lacer', 'recal', 'clear']` are equivilent 1st guesses; so just pick your favorite.
+* `2052` is overall score (sum of the last three intermediate scores).
+* `[308, 516, 697, 839]` are the intermediate scores; 308 is 10*percent; meaning 30.8% of the letters in the legal answers after one guess.
+* `['carle', 'lacer', 'recal', 'clear']` are 1st guess anagrams with the same score; so just pick your favorite.
 
-In summary, a set of words with top overall score (that I actually use and thing is effective) is:
+In summary, a set of words with top overall score (that I actually use and think is effective) is:
 * **clear** -- reveals 30.8% of the letters after one guess.
 * **bigot** -- reveals 51.6% of the letters after two guesses.
 * **kynds** -- reveals 69.7% of the letters after three guesses.
