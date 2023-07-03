@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
+import os
 import heapq
 
 class BestWords:
 
     def __init__(self):
+        here = os.path.dirname(os.path.abspath(__file__)) # source directory
         self.total_letters = 0
-        self.short_minis = self._get_minis('answers.txt')
+        self.short_minis = self._get_minis(os.path.join(here, 'answers.txt'))
         self.total_short, self.total_letters = self.total_letters, 0
-        self.minis = self._get_minis('legal_words.txt')
+        self.minis = self._get_minis(os.path.join(here,'legal_words.txt'))
         for mini, values in self.short_minis.items():
             if mini in self.minis:
                 self.minis[mini] += values
@@ -21,15 +23,12 @@ class BestWords:
 
     @staticmethod
     def overlapped(a, b):
+        """Returns whether there is an overlap of two words."""
         return len(set(list(a) + list(b))) != len(a) + len(b)
 
     @staticmethod
-    def no_overlap(a, b):
-        return len(set(list(a) + list(b))) == len(a) + len(b)
-
-    @staticmethod
     def get_overlap(a, b):
-        # number of letters found
+        """ number of overlapping letters in two words. """
         rv = 0
         for char in a:
             if char in b:
@@ -37,6 +36,10 @@ class BestWords:
         return rv
 
     def _get_minis(self, file_path):
+        """This reads a set of words in a file into a list of words
+        and into a set "minis" (or digests) that has the letters
+        sorted and dups removed.  It also counts the number of
+        letters used by all the words."""
         words = []
         minis = {}
 
@@ -62,66 +65,10 @@ class BestWords:
         total_letters = 5*len(minis)
         return(minis)
 
-    def get_most_overlap(self, exclude=''):
-        percent = .60
-        bests = set()
-        best_overlap = 0
-
-        for mini in self.minis:
-            if len(mini) != 5:
-                continue
-            if self.get_overlap(mini, exclude) > 0:
-                continue
-            overlap = 0
-            for other in self.minis:
-                overlap += self.get_overlap(mini, other)
-            if overlap > best_overlap:
-                best_overlap = overlap
-                bests.add((overlap, mini))
-                for best in list(bests):
-                    if best[0] < percent * best_overlap:
-                        bests.discard(best)
-
-        # return [(round(best[0]/best_overlap, 2), best[1]) for best in bests]
-        return [(best[0], best[1]) for best in bests]
-
-    def get_best(self):
-        def pct(val):
-            nonlocal self
-            return f'{int(1000*val/self.total_letters)}'
-            
-        # minis = self.get_minis()
-
-        ex = ['aiou', 'ou', 'o'] # 3.88 brens tidal gucky whomp
-        # ex = ['eiou', 'ou', 'o'] # 3.91 snarl debit gucky whomp
-        # ex = ['eiou', 'ou', 'u'] # none
-        # ex = ['yiou', 'iu', 'u'] # 3.86 stare block dying whump **132,213,298,363
-        # ex = ['yiou', 'yi', 'i'] # 3.82 saber clonk dumpy fight
-        # ex = ['aeiu', 'ou', 'u'] # 3.86 rotls began dicky whump
-        # ex = ['aeiou', 'aiou', 'a'] # 3.96 byrls nempt guido whack
-        print(f'excludes={ex}')
-
-        minis0 = self.get_most_overlap(exclude=ex[0])
-        minis = self.minis
-        for cnt0, mini0 in minis0:
-            row0 = f'{pct(cnt0)}: {minis[mini0]}'
-
-            minis1 = self.get_most_overlap(exclude=mini0 + ex[1])
-            for cnt1, mini1 in minis1:
-                row1 = f'  {pct(cnt0+cnt1)}: {minis[mini1]}'
-
-                minis2 = self.get_most_overlap(exclude=mini0 + mini1 + ex[2])
-                for cnt2, mini2 in minis2:
-                    row2 = f'    {pct(cnt0+cnt1+cnt2)}: {minis[mini2]}'
-
-                    minis3 = self.get_most_overlap(exclude=mini0 + mini1 + mini2)
-                    for cnt3, mini3 in minis3:
-                        print(f'{row0} {row1} {row2} ' +
-                              f'      {pct(cnt0+cnt1+cnt2+cnt3)}: {minis[mini3]}')
-
 
     @staticmethod
     def store_top(results, item):
+        """ This will store the top 30 items in a set of items. """
         if len(results) < 30:
             heapq.heappush(results, item)
         else:
@@ -142,12 +89,12 @@ class BestWords:
             return (scores[1]+scores[2]+scores[3], scores, found)
 
         rv = []
-        # aes = []
-        # ios = []
-        # us = []
-        # ys = []
         groups = [[], [], [], []]
 
+        # get all the possible sets of four words given the group of vowels
+        # and the word set chosen. the 4 words will cover 20 letters because
+        # each word must have 5 unique letters and use letters not covered
+        # by the preceding words.
         for i, word_dict in enumerate((self.uniq_shorts, self.uniq_minis)):
             for mini in word_dict:
                 vowels = ''.join(sorted(set(mini).intersection(set('aeiouy'))))
@@ -170,30 +117,25 @@ class BestWords:
                         found = f'{mini0} {mini1} {mini2} {mini3}'
                         scores = get_scores(found)
                         self.store_top(rv, scores)
-
-#                       if (False or (scores[0] > 290 and scores[1] > 400
-#                               and scores[2] > 600 and scores[3] > 830)):
-#                           rv.append([found, scores])
-#                           print(scores, self.minis[mini0],
-#                                 self.minis[mini1], self.minis[mini2], self.minis[mini3])
         return sorted(rv)
 
     def main(self):
-        #self.get_best()
 
         whichs = [
+                # These are the sets of vowels we try
+                # - the vowels must be alpabetical in each group/key
+                # - the value is a tuple:
+                #   - 0 means use legal answers; 1 means use legal guesses
+                #   - 0,1,2,3 are the guess numbers 
             { 'ae': (0, 0) ,'iu': (0, 1) ,'y': (1, 2) ,'o': (1, 3) },
-                # [309, 506, 675, 839] ['trace'] ['build'] ['nymph'] ['gowks']
             { 'ae': (0, 0) ,'io': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
-                # [308, 509, 697, 839] ['clear'] ['boing'] ['kydst'] ['whump']
             { 'aei': (1, 0) ,'o': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
-                # [291, 504, 691, 839] ['eniac'] ['growl'] ['kydst'] ['bumph']
             { 'eo': (0, 0) ,'ai': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
-
             { 'e': (0, 0) ,'a': (0, 1) ,'iy': (1, 2) ,'ou': (1, 3) },
-                # [295, 507, 678, 839] ['nerts', 'rents', 'terns', 'stern'] ['chalk'] ['midgy'] ['upbow']
         ]
         bests = []
+        # this loop prints out the top 30 for each vowel set above,
+        # and then the top 30 overall
         for which in whichs + [None]:
             rvs = self.get_some_fours(which) if which else sorted(bests)
             print(f'\n====== {which}')
@@ -203,8 +145,6 @@ class BestWords:
                     self.minis[minis[1]], self.minis[minis[2]], self.minis[minis[3]])
                 if which:
                     self.store_top(bests, rv)
-
-
 
 obj = BestWords()
 obj.main()
