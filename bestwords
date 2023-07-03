@@ -1,81 +1,210 @@
 #!/usr/bin/env python3
 
-def get_overlap(a, b):
-    rv = 0
-    for char in a:
-        if char in b:
-            rv += 1
-    return rv
+import heapq
 
-def get_keys():
-    file_path = "wordlist.txt"
-    words = []
-    keys = {}
+class BestWords:
 
-    with open(file_path, "r") as file:
-        file_contents = file.read()
-        words = file_contents.split()
-    print(f'#words = {len(words)}')
+    def __init__(self):
+        self.total_letters = 0
+        self.short_minis = self._get_minis('answers.txt')
+        self.total_short, self.total_letters = self.total_letters, 0
+        self.minis = self._get_minis('legal_words.txt')
+        for mini, values in self.short_minis.items():
+            if mini in self.minis:
+                self.minis[mini] += values
+            else:
+                self.minis[mini] = values
+        self.total_letters += self.total_short
+        self.uniq_minis = [mini for mini in self.minis if len(mini)==5]
+        self.uniq_shorts = [mini for mini in self.short_minis if len(mini)==5]
+        print(f'#uniq = {len(self.uniq_minis)}')
 
-    for word in words:
-        key = ''.join(sorted(set([char for char in word])))
-        if key in keys:
-            keys[key].append(word)
+    @staticmethod
+    def overlapped(a, b):
+        return len(set(list(a) + list(b))) != len(a) + len(b)
+
+    @staticmethod
+    def no_overlap(a, b):
+        return len(set(list(a) + list(b))) == len(a) + len(b)
+
+    @staticmethod
+    def get_overlap(a, b):
+        # number of letters found
+        rv = 0
+        for char in a:
+            if char in b:
+                rv += 1
+        return rv
+
+    def _get_minis(self, file_path):
+        words = []
+        minis = {}
+
+        with open(file_path, "r") as file:
+            file_contents = file.read()
+            lines = file_contents.splitlines()
+            for line in lines:
+                line = line.strip()
+                if not line.startswith('#'):
+                    words += line.split()
+        print(f'#words = {len(words)}')
+
+        for word in words:
+            mini = set(list(word))
+            mini = sorted(mini)
+            mini = ''.join(mini)
+            if mini in minis:
+                minis[mini].append(word)
+            else:
+                minis[mini] = [word]
+            self.total_letters += len(mini)
+        print(f'#minis = {len(minis)}')
+        total_letters = 5*len(minis)
+        return(minis)
+
+    def get_most_overlap(self, exclude=''):
+        percent = .60
+        bests = set()
+        best_overlap = 0
+
+        for mini in self.minis:
+            if len(mini) != 5:
+                continue
+            if self.get_overlap(mini, exclude) > 0:
+                continue
+            overlap = 0
+            for other in self.minis:
+                overlap += self.get_overlap(mini, other)
+            if overlap > best_overlap:
+                best_overlap = overlap
+                bests.add((overlap, mini))
+                for best in list(bests):
+                    if best[0] < percent * best_overlap:
+                        bests.discard(best)
+
+        # return [(round(best[0]/best_overlap, 2), best[1]) for best in bests]
+        return [(best[0], best[1]) for best in bests]
+
+    def get_best(self):
+        def pct(val):
+            nonlocal self
+            return f'{int(1000*val/self.total_letters)}'
+            
+        # minis = self.get_minis()
+
+        ex = ['aiou', 'ou', 'o'] # 3.88 brens tidal gucky whomp
+        # ex = ['eiou', 'ou', 'o'] # 3.91 snarl debit gucky whomp
+        # ex = ['eiou', 'ou', 'u'] # none
+        # ex = ['yiou', 'iu', 'u'] # 3.86 stare block dying whump **132,213,298,363
+        # ex = ['yiou', 'yi', 'i'] # 3.82 saber clonk dumpy fight
+        # ex = ['aeiu', 'ou', 'u'] # 3.86 rotls began dicky whump
+        # ex = ['aeiou', 'aiou', 'a'] # 3.96 byrls nempt guido whack
+        print(f'excludes={ex}')
+
+        minis0 = self.get_most_overlap(exclude=ex[0])
+        minis = self.minis
+        for cnt0, mini0 in minis0:
+            row0 = f'{pct(cnt0)}: {minis[mini0]}'
+
+            minis1 = self.get_most_overlap(exclude=mini0 + ex[1])
+            for cnt1, mini1 in minis1:
+                row1 = f'  {pct(cnt0+cnt1)}: {minis[mini1]}'
+
+                minis2 = self.get_most_overlap(exclude=mini0 + mini1 + ex[2])
+                for cnt2, mini2 in minis2:
+                    row2 = f'    {pct(cnt0+cnt1+cnt2)}: {minis[mini2]}'
+
+                    minis3 = self.get_most_overlap(exclude=mini0 + mini1 + mini2)
+                    for cnt3, mini3 in minis3:
+                        print(f'{row0} {row1} {row2} ' +
+                              f'      {pct(cnt0+cnt1+cnt2+cnt3)}: {minis[mini3]}')
+
+
+    @staticmethod
+    def store_top(results, item):
+        if len(results) < 30:
+            heapq.heappush(results, item)
         else:
-            keys[key] = [word]
-    print(f'#keys = {len(keys)}')
-    return(keys)
+            heapq.heappushpop(results, item)
 
-def get_most_overlap(keys, exclude=''):
-    percent = .60
-    bests = set()
-    best_overlap = 0
 
-    for key in keys:
-        if len(key) != 5:
-            continue
-        if get_overlap(key, exclude) > 0:
-            continue
-        overlap = 0
-        for other in keys:
-            overlap += get_overlap(key, other)
-        if overlap > best_overlap:
-            best_overlap = overlap
-            bests.add((overlap, key))
-            for best in list(bests):
-                if best[0] < percent * best_overlap:
-                    bests.discard(best)
+    def get_some_fours(self, which):
+        def get_scores(found):
+            nonlocal self
+            scores = []
+            words = found.split()
+            score = 0
+            for word in words:
+                for mini in self.short_minis:
+                    score += self.get_overlap(word, mini)
+                scores.append(int(1000*score/self.total_short))
+                
+            return (scores[1]+scores[2]+scores[3], scores, found)
 
-    # return [(round(best[0]/best_overlap, 2), best[1]) for best in bests]
-    return [(best[0]//100, best[1]) for best in bests]
+        rv = []
+        # aes = []
+        # ios = []
+        # us = []
+        # ys = []
+        groups = [[], [], [], []]
 
-def main():
-    keys = get_keys()
+        for i, word_dict in enumerate((self.uniq_shorts, self.uniq_minis)):
+            for mini in word_dict:
+                vowels = ''.join(sorted(set(mini).intersection(set('aeiouy'))))
+                pair = which.get(vowels, None)
+                if pair and i == pair[0]:
+                    groups[pair[1]].append(mini)
+        for group in groups:
+            print(f'#{len(group)} {group[0:10]}')
 
-    ex = ['aiou', 'ou', 'o'] # 3.88 brens tidal gucky whomp
-    ex = ['eiou', 'ou', 'o'] # 3.91 snarl debit gucky whomp
-    # ex = ['eiou', 'ou', 'u'] # none
-    ex = ['yiou', 'iu', 'u'] # 3.86 stare block dying whump **132,213,298,363
-    ex = ['yiou', 'yi', 'i'] # 3.82 saber clonk dumpy fight
-    ex = ['aeiu', 'ou', 'u'] # 3.86 rotls began dicky whump
-    ex = ['aeiou', 'aiou', 'a'] # 3.96 byrls nempt guido whack
-    print(f'excludes={ex}')
+        for mini0 in groups[0]:
+            for mini1 in groups[1]:
+                if self.overlapped(mini0, mini1):
+                    continue
+                for mini2 in groups[2]:
+                    if self.overlapped(mini0+mini1, mini2):
+                        continue
+                    for mini3 in groups[3]:
+                        if self.overlapped(mini0+mini1+mini2, mini3):
+                            continue
+                        found = f'{mini0} {mini1} {mini2} {mini3}'
+                        scores = get_scores(found)
+                        self.store_top(rv, scores)
 
-    keys0 = get_most_overlap(keys, exclude=ex[0])
-    for pct0, key0 in keys0:
-        row0 = f'{pct0}: {key0} {keys[key0]}'
+#                       if (False or (scores[0] > 290 and scores[1] > 400
+#                               and scores[2] > 600 and scores[3] > 830)):
+#                           rv.append([found, scores])
+#                           print(scores, self.minis[mini0],
+#                                 self.minis[mini1], self.minis[mini2], self.minis[mini3])
+        return sorted(rv)
 
-        keys1 = get_most_overlap(keys, exclude=key0 + ex[1])
-        for pct1, key1 in keys1:
-            row1 = f'  {pct0+pct1}: {key1} {keys[key1]}'
+    def main(self):
+        #self.get_best()
 
-            keys2 = get_most_overlap(keys, exclude=key0 + key1 + ex[2])
-            for pct2, key2 in keys2:
-                row2 = f'    {pct0+pct1+pct2}: {key2} {keys[key2]}'
+        whichs = [
+            { 'ae': (0, 0) ,'iu': (0, 1) ,'y': (1, 2) ,'o': (1, 3) },
+                # [309, 506, 675, 839] ['trace'] ['build'] ['nymph'] ['gowks']
+            { 'ae': (0, 0) ,'io': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
+                # [308, 509, 697, 839] ['clear'] ['boing'] ['kydst'] ['whump']
+            { 'aei': (1, 0) ,'o': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
+                # [291, 504, 691, 839] ['eniac'] ['growl'] ['kydst'] ['bumph']
+            { 'eo': (0, 0) ,'ai': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
 
-                keys3 = get_most_overlap(keys, exclude=key0 + key1 + key2)
-                for pct3, key3 in keys3:
-                    print(f'{row0}\n{row1}\n{row2}\n' +
-                          f'      {pct0+pct1+pct2+pct3}: {key3} {keys[key3]}')
+            { 'e': (0, 0) ,'a': (0, 1) ,'iy': (1, 2) ,'ou': (1, 3) },
+                # [295, 507, 678, 839] ['nerts', 'rents', 'terns', 'stern'] ['chalk'] ['midgy'] ['upbow']
+        ]
+        bests = []
+        for which in whichs + [None]:
+            rvs = self.get_some_fours(which) if which else sorted(bests)
+            print(f'\n====== {which}')
+            for rv in rvs:
+                minis = rv[2].split()
+                print(rv[0], rv[1], self.minis[minis[0]],
+                    self.minis[minis[1]], self.minis[minis[2]], self.minis[minis[3]])
+                if which:
+                    self.store_top(bests, rv)
 
-main()
+
+
+obj = BestWords()
+obj.main()

@@ -1,12 +1,4 @@
-# DEPRECATED
-# There are a total of 12,986 five letter words in our dictionary,
-# but in this list, we will only focus on the 2,309 words that are
-# answers for the popular word game, Wordle.
-# - Words with only y:
-#   crypt dryly glyph gypsy lymph myrrh nymph pygmy shyly slyly tryst wryly
-# - Words with only y and no repeat letters:
-#   crypt glyph lymph nymph
-# Five Letter Words For Wordle Words:
+# all the answers to wordle
 aback
 abase
 abate
@@ -48,6 +40,7 @@ agile
 aging
 aglow
 agony
+agora
 agree
 ahead
 aider
@@ -732,6 +725,7 @@ fetus
 fever
 fewer
 fiber
+fibre
 ficus
 field
 fiend
@@ -1180,6 +1174,7 @@ lurid
 lusty
 lying
 lymph
+lynch
 lyric
 macaw
 macho
@@ -1498,6 +1493,7 @@ puffy
 pulpy
 pulse
 punch
+pupal
 pupil
 puppy
 puree
@@ -1781,6 +1777,7 @@ slang
 slant
 slash
 slate
+slave
 sleek
 sleep
 sleet
@@ -2246,6 +2243,7 @@ weigh
 weird
 welch
 welsh
+wench
 whack
 whale
 wharf
