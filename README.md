@@ -44,4 +44,4 @@ NOTE:
 ## A Few Resources
 * [Wordle - The New York Times](https://www.nytimes.com/games/wordle/index.html) - the "official" game.
 * [Wordle Unlimited Practice Game | WordPlay](https://wordplay.com/) - play wordle 24/7 ;-)
-* [Wordle Solver](https://jonathanolson.net/wordle-solver/) - not much fun as a computer slave, but it suggest the lowest possible average tries is 3.42 (which is interesting to know).
+* [Wordle Solver](https://jonathanolson.net/wordle-solver/) - the site does not provide any fun/challenge for you as its data entry clerk, but it suggests the lowest possible average guesses is 3.42 (when using a computer for every guess).
