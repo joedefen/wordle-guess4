@@ -22,10 +22,12 @@ Guesses are scored by how many letters from all the legal answers are exposed by
 
 Overall score is the sum of the last three scores which tilts the overall score by sequences that reveal letters soonest (disregarding the one guess score because guessing on the second try happens rarely).
 
-## How to Use the Four "Best" Guesses
+## How to Use the Four "Best" Canned Guesses
 **Least Number of Guesses.** To minimize guesses, typically use the canned words in order until it seems there are no more than two answers (most often, requiring four exposed letters). Sometimes, swap the 3rd and 4th canned guesses if the latter seems more likely to reveal letters.
 
 **Least Chance of Failing and Least Effor.** If just trying to solve the puzzle with the highest probability and least effort, then use the canned guesses until five letters are exposed or the canned guesses are exhausted. This prevents you from wasting attempts on low probability, premature wild stabs, and you must "guess cautiously" only twice and with the most information available.
+
+> Personally, after some practice with these best canned words and aiming for least guesses (1) I solve in 4.0 to 4.4 turns on average and (2) I almost never fail and/or cheat (i.e., well under 1% failure rate).  For me, maintaining a 4.0 average requires much concentration, but the 4.4 average permits distraction (e.g., also watching TV) and/or guessing quickly.
 
 ## So, What are Other Good Scoring Sets of Four?
 The top scoring sets of four canned guesses are in the file, 'final-2023-07-02.txt'. To recreate the file, you can run `./bestwords`.
@@ -42,3 +44,4 @@ NOTE:
 ## A Few Resources
 * [Wordle - The New York Times](https://www.nytimes.com/games/wordle/index.html) - the "official" game.
 * [Wordle Unlimited Practice Game | WordPlay](https://wordplay.com/) - play wordle 24/7 ;-)
+* [Wordle Solver](https://jonathanolson.net/wordle-solver/) - not much fun as a computer slave, but it suggest the lowest possible average tries is 3.42 (which is interesting to know).
