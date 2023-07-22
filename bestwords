@@ -1,25 +1,28 @@
 #!/usr/bin/env python3
+"""TBD"""
+# pylint: disable=invalid-name,too-many-branches,too-many-locals
 
 import os
+import sys
 import heapq
 
 class BestWords:
-
+    """TBD"""
     def __init__(self):
         here = os.path.dirname(os.path.abspath(__file__)) # source directory
         self.total_letters = 0
-        self.short_minis = self._get_minis(os.path.join(here, 'answers.txt'))
+        self.short_germs = self._get_germs(os.path.join(here, 'answers.txt'))
         self.total_short, self.total_letters = self.total_letters, 0
-        self.minis = self._get_minis(os.path.join(here,'legal_words.txt'))
-        for mini, values in self.short_minis.items():
-            if mini in self.minis:
-                self.minis[mini] += values
+        self.germs = self._get_germs(os.path.join(here,'legal_words.txt'))
+        for germ, values in self.short_germs.items():
+            if germ in self.germs:
+                self.germs[germ] += values
             else:
-                self.minis[mini] = values
+                self.germs[germ] = values
         self.total_letters += self.total_short
-        self.uniq_minis = [mini for mini in self.minis if len(mini)==5]
-        self.uniq_shorts = [mini for mini in self.short_minis if len(mini)==5]
-        print(f'#uniq = {len(self.uniq_minis)}')
+        self.uniq_germs = [germ for germ in self.germs if len(germ)==5]
+        self.uniq_shorts = [germ for germ in self.short_germs if len(germ)==5]
+        print(f'#uniq = {len(self.uniq_germs)}')
 
     @staticmethod
     def overlapped(a, b):
@@ -29,21 +32,22 @@ class BestWords:
     @staticmethod
     def get_overlap(a, b):
         """ number of overlapping letters in two words. """
-        rv = 0
-        for char in a:
-            if char in b:
-                rv += 1
-        return rv
+        return len(set(list(a)) & set(list(b)))
+        #rv = 0
+        #for char in a:
+            #if char in b:
+                #rv += 1
+        #return rv
 
-    def _get_minis(self, file_path):
+    def _get_germs(self, file_path):
         """This reads a set of words in a file into a list of words
-        and into a set "minis" (or digests) that has the letters
+        and into a set "germs" (or digests) that has the letters
         sorted and dups removed.  It also counts the number of
         letters used by all the words."""
         words = []
-        minis = {}
+        germs = {}
 
-        with open(file_path, "r") as file:
+        with open(file_path, "r", encoding='utf-8') as file:
             file_contents = file.read()
             lines = file_contents.splitlines()
             for line in lines:
@@ -53,18 +57,17 @@ class BestWords:
         print(f'#words = {len(words)}')
 
         for word in words:
-            mini = set(list(word))
-            mini = sorted(mini)
-            mini = ''.join(mini)
-            if mini in minis:
-                minis[mini].append(word)
+            germ = set(list(word))
+            germ = sorted(germ)
+            germ = ''.join(germ)
+            if germ in germs:
+                germs[germ].append(word)
             else:
-                minis[mini] = [word]
-            self.total_letters += len(mini)
-        print(f'#minis = {len(minis)}')
-        total_letters = 5*len(minis)
-        return(minis)
-
+                germs[germ] = [word]
+            self.total_letters += len(germ)
+        print(f'#germs = {len(germs)}')
+        total_letters = 5*len(germs)
+        return germs
 
     @staticmethod
     def store_top(results, item):
@@ -74,64 +77,96 @@ class BestWords:
         else:
             heapq.heappushpop(results, item)
 
-
     def get_some_fours(self, which):
+        """TBD"""
         def get_scores(found):
             nonlocal self
             scores = []
             words = found.split()
             score = 0
             for word in words:
-                for mini in self.short_minis:
-                    score += self.get_overlap(word, mini)
+                for germ in self.short_germs:
+                    score += self.get_overlap(word, germ)
                 scores.append(int(1000*score/self.total_short))
-                
+
             return (scores[1]+scores[2]+scores[3], scores, found)
 
-        rv = []
-        groups = [[], [], [], []]
+        groups = {}
+        for key in which:
+            groups[key] = []
 
         # get all the possible sets of four words given the group of vowels
         # and the word set chosen. the 4 words will cover 20 letters because
         # each word must have 5 unique letters and use letters not covered
         # by the preceding words.
-        for i, word_dict in enumerate((self.uniq_shorts, self.uniq_minis)):
-            for mini in word_dict:
-                vowels = ''.join(sorted(set(mini).intersection(set('aeiouy'))))
-                pair = which.get(vowels, None)
-                if pair and i == pair[0]:
-                    groups[pair[1]].append(mini)
-        for group in groups:
-            print(f'#{len(group)} {group[0:10]}')
 
-        for mini0 in groups[0]:
-            for mini1 in groups[1]:
-                if self.overlapped(mini0, mini1):
-                    continue
-                for mini2 in groups[2]:
-                    if self.overlapped(mini0+mini1, mini2):
+        # go thru the words in both the short an long dictionary and
+        # save those if they have all the letters in the keys of "which"
+        # (if they are in the right dictionary)
+
+        for idx, word_dict in enumerate((self.uniq_shorts, self.uniq_germs)):
+            for germ in word_dict:
+                for key, key_word_dict in which.items():
+                    if key_word_dict != idx:
                         continue
-                    for mini3 in groups[3]:
-                        if self.overlapped(mini0+mini1+mini2, mini3):
+                    if self.get_overlap(key, germ) != len(key):
+                        continue
+                    if len(key) < 5 and self.get_overlap('aeiouy', germ) != len(key):
+                        continue
+                    groups[key].append(germ)
+
+        for key, group in groups.items():
+            print(f'{key} #{len(group)} {group[0:10]}')
+
+        rv = []
+        least_overlap = 1000
+        germs = list(groups.values())
+        last_pct = 0
+        loops = len(germs[0])
+        for idx, germ0 in enumerate(germs[0]):
+            for germ1 in germs[1]:
+                if self.overlapped(germ0, germ1):
+                    continue
+                for germ2 in germs[2]:
+                    if self.overlapped(germ0+germ1, germ2):
+                        continue
+                    for germ3 in germs[3]:
+                        lap = self.get_overlap(germ0+germ1+germ2, germ3)
+                        if lap > least_overlap:
                             continue
-                        found = f'{mini0} {mini1} {mini2} {mini3}'
+                        if lap < least_overlap:
+                            if least_overlap > 2:
+                                rv = []
+                            least_overlap = lap
+                        found = f'{germ0} {germ1} {germ2} {germ3}'
                         scores = get_scores(found)
                         self.store_top(rv, scores)
+            pct = int(100*idx/loops)
+            if pct > last_pct:
+                # print(f'{pct}%')
+                last_pct = pct
         return sorted(rv)
 
     def main(self):
+        """TBD"""
 
         whichs = [
                 # These are the sets of vowels we try
                 # - the vowels must be alpabetical in each group/key
                 # - the value is a tuple:
                 #   - 0 means use legal answers; 1 means use legal guesses
-                #   - 0,1,2,3 are the guess numbers 
-            { 'ae': (0, 0) ,'iu': (0, 1) ,'y': (1, 2) ,'o': (1, 3) },
-            { 'ae': (0, 0) ,'io': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
-            { 'aei': (1, 0) ,'o': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
-            { 'eo': (0, 0) ,'ai': (0, 1) ,'y': (1, 2) ,'u': (1, 3) },
-            { 'e': (0, 0) ,'a': (0, 1) ,'iy': (1, 2) ,'ou': (1, 3) },
+                #   - 0,1,2,3 are the guess numbers
+            # { 'ae': 0 ,'iu': 0 ,'y': 1 ,'o': 1 },
+            # { 'ae': 0 ,'io': 0 ,'y': 1 ,'u': 1 },
+            # { 'aei': 1 ,'o': 0 ,'y': 1 ,'u': 1 },
+            # { 'eo': 0 ,'ai': 0 ,'y': 1 ,'u': 1 },
+            # { 'e': 0 ,'a': 0 ,'iy': 1 ,'ou': 1 },
+            ## { 'parse': 1, 'clint': 1, 'oy': 1, 'u': 1 },
+            ## { 'scale': 1, 'print': 1, 'oy': 1, 'u': 1 },
+            { 'slant': 1, 'crime': 1, 'oy': 1, 'u': 1 },
+            # { 'slant': 1, 'crime': 1, 'o': 1, 'yu': 1 },
+            # { 'slant': 1, 'crime': 1, 'y': 1, 'ou': 1 },
+            # { 'slant': 1, 'crime': 1, 'o': 1, 'y': 1 },
         ]
         bests = []
         # this loop prints out the top 30 for each vowel set above,
@@ -140,9 +175,9 @@ class BestWords:
             rvs = self.get_some_fours(which) if which else sorted(bests)
             print(f'\n====== {which}')
             for rv in rvs:
-                minis = rv[2].split()
-                print(rv[0], rv[1], self.minis[minis[0]],
-                    self.minis[minis[1]], self.minis[minis[2]], self.minis[minis[3]])
+                germs = rv[2].split()
+                print(rv[0], rv[1], self.germs[germs[0]],
+                    self.germs[germs[1]], self.germs[germs[2]], self.germs[germs[3]])
                 if which:
                     self.store_top(bests, rv)
 
