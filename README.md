@@ -1,34 +1,38 @@
 # WORDLE-GUESS4 Project
 
-# Project Goal
-To find the "best" four ordered, predetermined guesses to solve a NY Times **wordle** puzzle.
+## Project Goal
+To find the "best" four "canned" guesses to solve a NY Times **wordle** puzzle as an "easy" human assist. Using these words can:
+* nearly minimize the time spent,
+* nearly maximize the odds of solving,
+* help lower the average number of attempts, and
+* find good solutions relatively quickly (i.e., no overnight runs, use only python, etc.).
 
-To find those four "canned" guesses efficiently, we use some heuristics including:
-* each guess must add 5 more letters to the attempted letter set
-* the six possible vowels must be split 2-2-1-1 or 3-1-1-1, and we give the algorithm intuitively good sets of vowels (rather than trying them all).
+**Suggested Human Stategy**:
+* by default, play all four canned words and then guess; if you do this, then you will often solve on the 5th try, and if not, on the 6th.
+* to lower your average attempts significantly:
+  * start guessing the answer when you think it has been narrowed down to one or two words; this typically requires 4 known letters; possibly just 3 if some positions are known and the expose letters are helpful (e.g., consonants are usually more helpful).
+  * sometimes, it makes sense to reverse the 3th and 4th word.
+ * starting to guess too early (e.g. there are actually more than two possibilites) is the "trap" that loses most games; when you deviate from the canned words, reconsider after the first deviation if it seems you misjudged (and resume the unused canned words).
+
+
+## Program Design
+### Internal Heuristics
+To find  four "canned" guesses efficiently, we use some heuristics including:
+* each guess must add 5 more letters to the attempted letter set, except for the 4th which may expose as few as 3 more letters.
+* exposing all the vowels by giving the algorithm intuitively good sets of vowels (rather than trying them all); the six possible vowels must be split 2-2-1-1 or 3-1-1-1, and, for example, "u" belongs in the 3rd or 4th word intuitively.
 * using two lists of 5-letter words:
     * all the legal answers to **wordle**.
     * all the legal guesses to **wordle**.
 * when the vowels are common, we restrict the considered words to the legal answers; otherwise the legal guesses
     * e.g., if looking for with only "y" as a vowel, we use the legal guesses list, but for "a", we use the legal answers.
-    * this not only speeds up the algorithm, it prefers common words when it would not compromise the result.
+    * this speeds up the algorithm, and it prefers more common words when the word set is bountiful.
 
-## Scoring
-Guesses are scored by how many letters from all the legal answers are exposed by the word. For the highest scoring set of four:
-* **clear** -- reveals 30.8% of the letters after one guess.
-* **bigot** -- reveals 51.6% of the letters after two guesses.
-* **kynds** -- reveals 69.7% of the letters after three guesses.
-* **whump** -- reveals 83.9% of the letters after three guesses.
+### Scoring
+Without all the gory details, the scoring favors
+* words with letters in the most frequent position (i.e. a word with "s" is favored if "s" is in the first position where it is found most often)
+* sets of words that expose the most letters sooner rather than later.
 
-Overall score is the sum of the last three scores which tilts the overall score by sequences that reveal letters soonest (disregarding the one guess score because guessing on the second try happens rarely).
-
-## How to Use the Four "Best" Canned Guesses
-**Least Number of Guesses.** To minimize guesses, typically use the canned words in order until it seems there are no more than two answers (most often, requiring four exposed letters). Sometimes, swap the 3rd and 4th canned guesses if the latter seems more likely to reveal letters.
-
-**Least Chance of Failing and Least Effor.** If just trying to solve the puzzle with the highest probability and least effort, then use the canned guesses until five letters are exposed or the canned guesses are exhausted. This prevents you from wasting attempts on low probability, premature wild stabs, and you must "guess cautiously" only twice and with the most information available.
-
-> Personally, after some practice with these best canned words and aiming for least guesses (1) I solve in 4.0 to 4.4 turns on average and (2) I almost never fail and/or cheat (i.e., well under 1% failure rate).  For me, maintaining a 4.0 average requires much concentration, but the 4.4 average permits distraction (e.g., also watching TV) and/or guessing quickly.
-
+### Summary of Results
 ## So, What are Other Good Scoring Sets of Four?
 The top scoring sets of four canned guesses are in the file, 'final-2023-07-02.txt'. To recreate the file, you can run `./bestwords`.
 
