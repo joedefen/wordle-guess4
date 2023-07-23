@@ -1,10 +1,66 @@
 #!/usr/bin/env python3
 """TBD"""
 # pylint: disable=invalid-name,too-many-branches,too-many-locals
+# pylint: disable=too-many-nested-blocks
 
 import os
 import sys
+from types import SimpleNamespace
 import heapq
+
+class Scorer:
+    """Class for doing scoring compuations"""
+    scorer = None
+    letters = {}
+    grand_uniq_cnt = 0
+    word_cnt = 0
+
+    def __init__(self):
+        for letter in list('abcdefghijklmnopqrstuvwxyz'):
+            self.letters[letter] = SimpleNamespace(
+                    letter=letter,
+                    pos_cnts=[0, 0, 0, 0, 0],
+                    pos_sum=0,
+                    uniq_cnt=0
+                )
+
+    @staticmethod
+    def get_singleton():
+        """TBD"""
+        if not Scorer.scorer:
+            Scorer.scorer = Scorer()
+        return Scorer.scorer
+
+    def add_word(self, word):
+        """ Add a word to the scoring database."""
+        seen = set()
+        for pos, letter in enumerate(list(word)):
+            ns = self.letters[letter]
+            ns.pos_cnts[pos] += 1
+            ns.pos_sum += 1
+            if letter not in seen:
+                seen.add(letter)
+                ns.uniq_cnt += 1
+                Scorer.grand_uniq_cnt += 1
+        self.word_cnt += 1
+        
+    def raw_score(self, word):
+        score = 0
+        for pos, letter in enumerate(set(list(word))):
+            ns = self.letters[letter]
+            score += ns.uniq_cnt
+        return score
+
+    def dump(self):
+        """Show the scoring stats"""
+        print(f'{self.word_cnt} words; {Scorer.grand_uniq_cnt} unique letters')
+
+        nses = sorted(self.letters.values(), key= lambda ns: ns.uniq_cnt, reverse=True)
+        for ns in nses:
+            freqs = [f'{(100*cnt)//ns.uniq_cnt:2d}' for cnt in ns.pos_cnts]
+            freqs_str = ' '.join(freqs)
+            print(f'{ns.letter}: {(1000*ns.uniq_cnt)//Scorer.grand_uniq_cnt:3d} pct: {freqs_str}')
+
 
 class BestWords:
     """TBD"""
@@ -46,6 +102,7 @@ class BestWords:
         letters used by all the words."""
         words = []
         germs = {}
+        scorer = Scorer.get_singleton() if 'answers' in file_path else None
 
         with open(file_path, "r", encoding='utf-8') as file:
             file_contents = file.read()
@@ -57,6 +114,9 @@ class BestWords:
         print(f'#words = {len(words)}')
 
         for word in words:
+            if scorer:
+                scorer.add_word(word)
+
             germ = set(list(word))
             germ = sorted(germ)
             germ = ''.join(germ)
@@ -66,7 +126,7 @@ class BestWords:
                 germs[germ] = [word]
             self.total_letters += len(germ)
         print(f'#germs = {len(germs)}')
-        total_letters = 5*len(germs)
+        # total_letters = 5*len(germs)
         return germs
 
     @staticmethod
@@ -80,18 +140,27 @@ class BestWords:
     def get_some_fours(self, which):
         """TBD"""
         def get_scores(found):
-            nonlocal self
+            nonlocal self, scorer
             scores = []
             words = found.split()
             score = 0
+            used_letters = set()
             for word in words:
-                for germ in self.short_germs:
-                    score += self.get_overlap(word, germ)
+                subword = ''
+                for letter in list(word):
+                    if letter not in used_letters:
+                        subword += letter
+                        used_letters.add(letter)
+                score += scorer.raw_score(subword)
                 scores.append(int(1000*score/self.total_short))
 
-            return (scores[1]+scores[2]+scores[3], scores, found)
+            return (int(0.05*scores[0]
+                    + 0.10*scores[1]
+                    + 0.15*scores[2]
+                    + 0.7*scores[3]), scores, found)
 
         groups = {}
+        scorer = Scorer.get_singleton()
         for key in which:
             groups[key] = []
 
@@ -156,17 +225,17 @@ class BestWords:
                 # - the value is a tuple:
                 #   - 0 means use legal answers; 1 means use legal guesses
                 #   - 0,1,2,3 are the guess numbers
-            # { 'ae': 0 ,'iu': 0 ,'y': 1 ,'o': 1 },
-            # { 'ae': 0 ,'io': 0 ,'y': 1 ,'u': 1 },
-            # { 'aei': 1 ,'o': 0 ,'y': 1 ,'u': 1 },
-            # { 'eo': 0 ,'ai': 0 ,'y': 1 ,'u': 1 },
-            # { 'e': 0 ,'a': 0 ,'iy': 1 ,'ou': 1 },
+            { 'ae': 0 ,'iu': 0 ,'y': 1 ,'o': 1 },
+            { 'ae': 0 ,'io': 0 ,'y': 1 ,'u': 1 }, # winner
+            { 'aei': 1 ,'o': 0 ,'y': 1 ,'u': 1 },
+            { 'eo': 0 ,'ai': 0 ,'y': 1 ,'u': 1 },
+            { 'e': 0 ,'a': 0 ,'iy': 1 ,'ou': 1 },
             ## { 'parse': 1, 'clint': 1, 'oy': 1, 'u': 1 },
             ## { 'scale': 1, 'print': 1, 'oy': 1, 'u': 1 },
             { 'slant': 1, 'crime': 1, 'oy': 1, 'u': 1 },
-            # { 'slant': 1, 'crime': 1, 'o': 1, 'yu': 1 },
-            # { 'slant': 1, 'crime': 1, 'y': 1, 'ou': 1 },
-            # { 'slant': 1, 'crime': 1, 'o': 1, 'y': 1 },
+            { 'slant': 1, 'crime': 1, 'o': 1, 'yu': 1 },
+            { 'slant': 1, 'crime': 1, 'y': 1, 'ou': 1 },
+            { 'slant': 1, 'crime': 1, 'o': 1, 'y': 1 },
         ]
         bests = []
         # this loop prints out the top 30 for each vowel set above,
@@ -182,4 +251,5 @@ class BestWords:
                     self.store_top(bests, rv)
 
 obj = BestWords()
+Scorer.get_singleton().dump()
 obj.main()
