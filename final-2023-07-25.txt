@@ -1,0 +1,62 @@
+
+====== a-e-i-ouy range=780-794 complexity: 105x269x341x30=0.3G
+
+====== a-e-ui-oy range=808-825 complexity: 105x269x168x152=0.7G
+
+====== a-ei-oy-u range=836-849 complexity: 105x145x152x243=0.5G
+
+====== a-ei-uy-o range=842-866 complexity: 105x145x114x355=0.6G
+
+====== a-ei-o-uy range=844-867 complexity: 105x145x355x114=0.6G
+
+====== ae-iu-y-o range=793-812 complexity: 220x168x23x355=0.3G
+
+====== ae-io-y-u range=802-820 complexity: 220x288x23x243=0.3G
+
+====== aei-o-y-u range=798-819 complexity: 111x355x23x243=0.2G
+
+====== e-a-iy-ou range=810-825 complexity: 269x105x137x243=0.9G
+
+====== e-ai-uy-o range=818-833 complexity: 269x521x114x355=5.3G
+
+====== e-ai-oy-u range=812-841 complexity: 269x521x152x243=4.8G
+
+====== ei-a-oy-u range=843-864 complexity: 145x105x152x243=0.5G
+
+====== ei-a-uy-o range=846-864 complexity: 145x105x114x355=0.6G
+
+====== ei-a-o-uy range=849-865 complexity: 145x105x355x114=0.6G
+
+====== eo-ai-y-u range=796-816 complexity: 124x521x23x243=0.3G
+
+====== None range=855-867
+855  [317, 588, 778, 940] slice graft wonky bumph /djqvxz ei-a-oy-u
+856  [314, 598, 775, 941] slant drive chowk bumpy /fgjqxz a-ei-o-uy
+856  [314, 603, 769, 946] slant fried bumpy chowk /gjqvxz a-ei-uy-o
+856  [317, 592, 758, 955] slice grand bumpy fowth /jkqvxz ei-a-uy-o
+857  [303, 567, 794, 956] slime prank botch fudgy /jqvwxz ei-a-o-uy
+857  [309, 580, 794, 956] slide graft conky bumph /jqvwxz ei-a-oy-u
+857  [309, 594, 779, 955] slide craft bungy whomp /jkqvxz ei-a-uy-o
+857  [314, 603, 780, 946] slant fried chowk bumpy /gjqvxz a-ei-o-uy
+857  [314, 609, 785, 955] slant bride whomp gucky /fjqvxz a-ei-o-uy
+857  [314, 610, 787, 933] slant prime chowk judgy /bfqvxz a-ei-o-uy
+857  [317, 592, 784, 939] slice grand boxty whump /fjkqvz ei-a-oy-u
+857  [328, 567, 794, 956] shire blank compt fudgy /jqvwxz ei-a-o-uy
+858  [303, 587, 790, 956] grant shied flock bumpy /jqvwxz a-ei-o-uy
+858  [317, 594, 784, 946] slice draft wonky bumph /gjqvxz ei-a-oy-u
+858  [317, 592, 779, 955] slice grand bufty whomp /jkqvxz ei-a-uy-o
+859  [301, 572, 781, 956] shine graft block dumpy /jqvwxz ei-a-o-uy
+859  [314, 609, 779, 955] slant bride gucky whomp /fjqvxz a-ei-uy-o
+859  [317, 588, 779, 955] slice graft bundy whomp /jkqvxz ei-a-uy-o
+859  [317, 592, 789, 955] slice grand fowth bumpy /jkqvxz ei-a-o-uy
+860  [296, 610, 772, 949] prime slant fudgy chowk /bjqvxz ei-a-uy-o
+860  [317, 620, 786, 935] slice grant bumpy vozhd /fjkqwx ei-a-uy-o
+861  [296, 610, 787, 949] prime slant chowk fudgy /bjqvxz ei-a-o-uy
+861  [303, 612, 778, 955] grant slide bumpy chowk /fjqvxz a-ei-uy-o
+861  [317, 594, 779, 955] slice draft bungy whomp /jkqvxz ei-a-uy-o
+862  [303, 612, 789, 955] grant slide chowk bumpy /fjqvxz a-ei-o-uy
+864  [309, 612, 778, 955] slide grant bumpy chowk /fjqvxz ei-a-uy-o
+864  [317, 588, 793, 955] slice graft downy bumph /jkqvxz ei-a-oy-u
+865  [309, 612, 789, 955] slide grant chowk bumpy /fjqvxz ei-a-o-uy
+866  [314, 610, 772, 949] slant prime fudgy chowk /bjqvxz a-ei-uy-o
+867  [314, 610, 787, 949] slant prime chowk fudgy /bjqvxz a-ei-o-uy
