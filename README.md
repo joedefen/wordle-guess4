@@ -35,19 +35,6 @@ Without all the gory details, the scoring favors
 * words with letters in the most frequent position (i.e. a word with "s" is favored if "s" is in the first position where it is found most often)
 * sets of words that expose the most letters sooner rather than later.
 
-### Summary of Results
-## So, What are Other Good Scoring Sets of Four?
-The top scoring sets of four canned guesses are in the file, 'final-2023-07-02.txt'. To recreate the file, you can run `./bestwords`.
-
-To help decode the output, here is the last line (and the top overall score) and its interpretation:
-```
-2052 [308, 516, 697, 839] ['carle', 'lacer', 'recal', 'clear'] ['bigot'] ['kynds'] ['whump']
-```
-NOTE:
-* `2052` is overall score (sum of the last three intermediate scores).
-* `[308, 516, 697, 839]` are the intermediate scores; 308 is 10*percent; meaning 30.8% of the letters in the legal answers after one guess (like expressing a batting average).
-* `['carle', 'lacer', 'recal', 'clear']` are 1st guess anagrams with the same score; so just pick your favorite.
-
 ## Top 30 Results
 Here are the top 30 results.  Using the first row as an example, the columns are:
 * `855` - the adjusted score weighing the factors describe above,
