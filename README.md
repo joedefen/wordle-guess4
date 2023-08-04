@@ -8,13 +8,12 @@ To find the "best" four "canned" guesses to solve a NY Times **wordle** puzzle a
 
 > To play wordle optimally, you must craft the next word given all the know information and the statistics of remaining possibilities.  This strategy mostly eliminates that time consuming, tedious chore w/o sacrificing losing the game.
 
-**Spoiler Alert.** Most people have favorite first words pulled from computer simulations or trial-and-error. But, using four canned words makes wordle too easy to solve.  If new to Wordle, then you can use these words as "training wheels", particularly if you try to lower your average tries by looking for opportunities to deviate from the canned words to minimize the average number of guesses.
+**Spoiler Alert.** Most people have favorite first words pulled from computer simulations or trial-and-error. But, using four canned words may make wordle "too easy to solve".  If new to Wordle, then you can use these words as "training wheels", particularly if you try to lower your average tries by looking for opportunities to deviate from the canned words to minimize the average number of guesses.
 
 **Suggested Human Stategy**:
 * by default, play all four canned words and then guess; if you do this, then you will often solve on the 5th try, and if not, on the 6th.
 * to lower your average attempts significantly:
   * start guessing the answer when you think it has been narrowed down to one or two words; this typically requires 4 known letters; possibly just 3 if some positions are known and the exposed letters are very helpful.
-  * sometimes, it makes sense to reverse the 3th and 4th word; e.g., if word 4 ends in "y" and "e" has been eliminated from slot 4 and 5 and slot 5 is uncertain, then play word 4 play the word ending in "y".
  * starting to guess too early (e.g. when there are actually more than two possibilites) is the "trap" that loses most games; when you deviate from the canned words, reconsider after the first deviation if it seems you misjudged (and resume the unused canned words).
  * see more tips in the section below, "Additional Some Rules of Thumb".
 
@@ -22,7 +21,7 @@ To find the "best" four "canned" guesses to solve a NY Times **wordle** puzzle a
 ### Internal Heuristics
 To find  four "canned" guesses efficiently, we use some heuristics including:
 * each guess must add 5 more letters to the attempted letter set, except for the 4th which may expose as few as 3 more letters.
-* exposing all the vowels by giving the algorithm intuitively good sets of vowels (rather than trying them all); the six possible vowels must be split 2-2-1-1 or 3-1-1-1, and, for example, "u" belongs in the 3rd or 4th word intuitively.
+* exposing all the vowels by giving the algorithm intuitively good sets of vowels (rather than trying them all); the six possible vowels must be split 2-2-1-1 or 3-1-1-1, and, for example, "u" may belong in the 3rd or 4th word intuitively.
 * using two lists of 5-letter words:
     * all the legal answers to **wordle**.
     * all the legal guesses to **wordle**.
@@ -32,8 +31,9 @@ To find  four "canned" guesses efficiently, we use some heuristics including:
 
 ### Scoring
 Without all the gory details, the scoring favors
-* words with letters in the most frequent position (i.e. a word with "s" is favored if "s" is in the first position where it is found most often)
+* words with letters in the most frequent slot (i.e. a word with "s" is favored if "s" is in the first slot where it is found most often)
 * sets of words that expose the most letters sooner rather than later.
+The option, "-x {EXPONENT}" will favor the right slot with higher values of EXPONENT. The default EXPONENT is 2 which strongly favors the right slot.
 
 ## Top 30 Results
 Here are the top 30 results.  Using the first row as an example, the columns are:
@@ -43,42 +43,42 @@ Here are the top 30 results.  Using the first row as an example, the columns are
 * `/20` - the number of unique letters in the four words (20 is the most possible)
 * `ei-a-oy-u` - the vowel sequence of the four words.
 ```
-855  [317, 588, 778, 940] slice graft wonky bumph /djqvxz ei-a-oy-u
-856  [314, 598, 775, 941] slant drive chowk bumpy /fgjqxz a-ei-o-uy
-856  [314, 603, 769, 946] slant fried bumpy chowk /gjqvxz a-ei-uy-o
-856  [317, 592, 758, 955] slice grand bumpy fowth /jkqvxz ei-a-uy-o
-857  [303, 567, 794, 956] slime prank botch fudgy /jqvwxz ei-a-o-uy
-857  [309, 580, 794, 956] slide graft conky bumph /jqvwxz ei-a-oy-u
-857  [309, 594, 779, 955] slide craft bungy whomp /jkqvxz ei-a-uy-o
-857  [314, 603, 780, 946] slant fried chowk bumpy /gjqvxz a-ei-o-uy
-857  [314, 609, 785, 955] slant bride whomp gucky /fjqvxz a-ei-o-uy
-857  [314, 610, 787, 933] slant prime chowk judgy /bfqvxz a-ei-o-uy
-857  [317, 592, 784, 939] slice grand boxty whump /fjkqvz ei-a-oy-u
-857  [328, 567, 794, 956] shire blank compt fudgy /jqvwxz ei-a-o-uy
-858  [303, 587, 790, 956] grant shied flock bumpy /jqvwxz a-ei-o-uy
-858  [317, 594, 784, 946] slice draft wonky bumph /gjqvxz ei-a-oy-u
-858  [317, 592, 779, 955] slice grand bufty whomp /jkqvxz ei-a-uy-o
-859  [301, 572, 781, 956] shine graft block dumpy /jqvwxz ei-a-o-uy
-859  [314, 609, 779, 955] slant bride gucky whomp /fjqvxz a-ei-uy-o
-859  [317, 588, 779, 955] slice graft bundy whomp /jkqvxz ei-a-uy-o
-859  [317, 592, 789, 955] slice grand fowth bumpy /jkqvxz ei-a-o-uy
-860  [296, 610, 772, 949] prime slant fudgy chowk /bjqvxz ei-a-uy-o
-860  [317, 620, 786, 935] slice grant bumpy vozhd /fjkqwx ei-a-uy-o
-861  [296, 610, 787, 949] prime slant chowk fudgy /bjqvxz ei-a-o-uy
-861  [303, 612, 778, 955] grant slide bumpy chowk /fjqvxz a-ei-uy-o
-861  [317, 594, 779, 955] slice draft bungy whomp /jkqvxz ei-a-uy-o
-862  [303, 612, 789, 955] grant slide chowk bumpy /fjqvxz a-ei-o-uy
-864  [309, 612, 778, 955] slide grant bumpy chowk /fjqvxz ei-a-uy-o
-864  [317, 588, 793, 955] slice graft downy bumph /jkqvxz ei-a-oy-u
-865  [309, 612, 789, 955] slide grant chowk bumpy /fjqvxz ei-a-o-uy
-866  [314, 610, 772, 949] slant prime fudgy chowk /bjqvxz a-ei-uy-o
-867  [314, 610, 787, 949] slant prime chowk fudgy /bjqvxz a-ei-o-uy
+2812  [253, 515, 691, 912] briny slack whomp fudge /jqtvxz iy-a-o-ue
+2814  [230, 469, 726, 956] spicy blank froth mudge /jqvwxz iy-a-o-ue
+2814  [239, 469, 725, 946] spiny black whort fudge /jmqvxz iy-a-o-ue
+2815  [253, 515, 712, 917] briny slack fowth muxed /gjpqvz iy-a-o-ue
+2816  [242, 466, 697, 931] shiny flack bortz pudge /jmqvwx iy-a-o-ue
+2818  [239, 469, 726, 956] spiny black froth mudge /jqvwxz iy-a-o-ue
+2818  [242, 513, 722, 927] shiny graft block muxed /jpqvwz iy-a-o-ue
+2819  [242, 472, 735, 956] shiny black tromp fudge /jqvwxz iy-a-o-ue
+2820  [253, 493, 721, 942] briny chalk smowt fudge /jpqvxz iy-a-o-ue
+2822  [253, 509, 712, 946] briny swath flock pudge /jmqvxz iy-a-o-ue
+2824  [251, 502, 729, 934] shily frank compt judge /bqvwxz iy-a-o-ue
+2825  [253, 477, 712, 946] briny flack sowth pudge /jmqvxz iy-a-o-ue
+2827  [244, 495, 722, 927] slimy frank botch judge /pqvwxz iy-a-o-ue
+2828  [212, 469, 722, 956] blimy shaft cronk pudge /jqvwxz iy-a-o-ue
+2828  [244, 518, 715, 942] slimy crank fowth budge /jpqvxz iy-a-o-ue
+2832  [253, 493, 725, 946] briny chalk swopt fudge /jmqvxz iy-a-o-ue
+2833  [242, 507, 734, 955] shiny brawl compt fudge /jkqvxz iy-a-o-ue
+2834  [244, 495, 729, 956] slimy frank potch budge /jqvwxz iy-a-o-ue
+2839  [253, 490, 710, 931] briny shack plotz fudge /jmqvwx iy-a-o-ue
+2840  [244, 508, 735, 956] slimy prank botch fudge /jqvwxz iy-a-o-ue
+2841  [212, 458, 722, 956] blimy shank croft pudge /jqvwxz iy-a-o-ue
+2842  [235, 508, 735, 956] bliny shark compt fudge /jqvwxz iy-a-o-ue
+2845  [244, 442, 715, 942] slimy whack front budge /jpqvxz iy-a-o-ue
+2846  [253, 515, 712, 917] briny slack fowth judge /mpqvxz iy-a-o-ue
+2854  [212, 449, 722, 927] blimy shack front judge /pqvwxz iy-a-o-ue
+2858  [244, 495, 722, 956] slimy frank botch pudge /jqvwxz iy-a-o-ue
+2862  [253, 515, 712, 942] briny slack fowth mudge /jpqvxz iy-a-o-ue
+2877  [253, 515, 712, 946] briny slack fowth pudge /jmqvxz iy-a-o-ue
+2886  [212, 449, 722, 956] blimy shack front pudge /jqvwxz iy-a-o-ue
+2902  [251, 502, 729, 956] shily frank compt budge /jqvwxz iy-a-o-ue
 ```
 All are good choices; I typically use:
 ```
-858  [303, 587, 790, 956] grant shied flock bumpy /jqvwxz a-ei-o-uy
+2858  [244, 495, 722, 956] slimy frank botch pudge /jqvwxz iy-a-o-ue
 ```
-It scores decently, uses four quite normal words, and only "jqvwxz" (the six least frequent letters) are uncovered.
+It scores decently overall, uses four quite normal words, and only "jqvwxz" (the six least frequent letters) are uncovered.  If you're OK with wierd words, shily-frank-compt-budge scores best.
 
 ## Letter Frequencies
 ```

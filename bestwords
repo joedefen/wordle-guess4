@@ -305,8 +305,8 @@ class BestWords:
         """TBD"""
         import argparse
         parser = argparse.ArgumentParser()
-        parser.add_argument('-x', '--exponent', default=0.33, type=float,
-                help='value to favor letter in right slot [def=0.33, min=0, max=2]')
+        parser.add_argument('-x', '--exponent', default=2.0, type=float,
+                help='value to favor letter in right slot [def=2, min=0, max=4]')
         parser.add_argument('-p', '--pick', default='',
                             help='substring to match vowel sets')
         parser.add_argument('-k', '--keys', type=str, default='',
@@ -317,6 +317,8 @@ class BestWords:
                             help='show words stats only')
         parser.add_argument('-v', '--verbose', action='store_true',
                             help='show detail / debugging info')
+        
+        sys.stdout.reconfigure(line_buffering=True)
 
         self.get_word_lists(parser.parse_args())
         if self.opts.exponent > 2.0:
@@ -339,22 +341,32 @@ class BestWords:
         whichs = [
                 # These are the sets of vowels we try
                 # - the second value is whether "priority"
-                # - need 855 or more to make final 30
-            ('a-e-i-ouy', False), # 794
-            ('a-e-ui-oy', False), # 825
-            ('a-ei-oy-u', False), # 849
-            ('a-ei-uy-o', True), # 866 winner
-            ('a-ei-o-uy', True), # 867 winner
-            ('ae-iu-y-o', False), # 812
-            ('ae-io-y-u', False), # 820
-            ('aei-o-y-u', False), # 819
-            ('e-a-iy-ou', False), # 825
-            ('e-ai-uy-o', False), # 833
-            ('e-ai-oy-u', False), # 841
-            ('ei-a-oy-u', True), # 864 winner
-            ('ei-a-uy-o', True), # 864 winner
-            ('ei-a-o-uy', True), # 864 winner
-            ('eo-ai-y-u', False), # 818
+                #   or a contender (for -x2)
+            ('a-e-i-ouy', False), #
+            ('a-e-ui-oy', False), #
+            ('a-ei-oy-u', False), #
+            ('a-ei-uy-o', True), # 2730
+            ('a-ei-o-uy', False), #
+            ('ae-iu-y-o', False), #
+            ('ae-io-y-u', False), #
+            ('aei-o-y-u', False), #
+            ('e-a-iy-ou', False), #
+            ('e-ai-uy-o', False), #
+            ('e-ai-oy-u', False), #
+            ('ei-a-oy-u', False), #
+            ('ei-a-uy-o', False), #
+            ('ei-a-o-uy', False), #
+            ('eo-ai-y-u', False), #
+            ('a-ue-iy-o', False), #
+            ('a-ue-iy-o', False), #
+            ('ae-iy-u-o', True), # 2787
+            ('ae-i-oy-u', False), #
+            ('iy-a-o-ue', True), # 2902
+            ('o-iy-ue-a', False), #
+            ('ou-ae-i-y', False), #
+            ('oe-y-i-au', False), #
+            ('ue-i-a-oy', False), #
+            ('ue-i-a-oy', False), #
             (None, True) # None forces final results
         ]
         bests = []
