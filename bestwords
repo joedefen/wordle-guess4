@@ -345,8 +345,12 @@ class BestWords:
             ('a-e-i-ouy', False), #
             ('a-e-ui-oy', False), #
             ('a-ei-oy-u', False), #
-            ('a-ei-uy-o', True), # 2730
+            ('a-ei-uy-o', False), # 2730
             ('a-ei-o-uy', False), #
+            ('a-ue-iy-o', False), #
+            ('a-ue-iy-o', False), #
+            ('ae-iy-u-o', False), # 2787
+            ('ae-i-oy-u', False), #
             ('ae-iu-y-o', False), #
             ('ae-io-y-u', False), #
             ('aei-o-y-u', False), #
@@ -357,15 +361,13 @@ class BestWords:
             ('ei-a-uy-o', False), #
             ('ei-a-o-uy', False), #
             ('eo-ai-y-u', False), #
-            ('a-ue-iy-o', False), #
-            ('a-ue-iy-o', False), #
-            ('ae-iy-u-o', True), # 2787
-            ('ae-i-oy-u', False), #
             ('iy-a-o-ue', True), # 2902
+            ('iy-o-a-ue', True), # 2879
             ('o-iy-ue-a', False), #
             ('ou-ae-i-y', False), #
+            ('oy-ai-u-e', True), # 
+            ('oy-i-a-ue', True), # 2877
             ('oe-y-i-au', False), #
-            ('ue-i-a-oy', False), #
             ('ue-i-a-oy', False), #
             (None, True) # None forces final results
         ]

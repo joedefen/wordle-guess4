@@ -43,34 +43,34 @@ Here are the top 30 results.  Using the first row as an example, the columns are
 * `/20` - the number of unique letters in the four words (20 is the most possible)
 * `ei-a-oy-u` - the vowel sequence of the four words.
 ```
-2812  [253, 515, 691, 912] briny slack whomp fudge /jqtvxz iy-a-o-ue
-2814  [230, 469, 726, 956] spicy blank froth mudge /jqvwxz iy-a-o-ue
-2814  [239, 469, 725, 946] spiny black whort fudge /jmqvxz iy-a-o-ue
-2815  [253, 515, 712, 917] briny slack fowth muxed /gjpqvz iy-a-o-ue
-2816  [242, 466, 697, 931] shiny flack bortz pudge /jmqvwx iy-a-o-ue
-2818  [239, 469, 726, 956] spiny black froth mudge /jqvwxz iy-a-o-ue
-2818  [242, 513, 722, 927] shiny graft block muxed /jpqvwz iy-a-o-ue
-2819  [242, 472, 735, 956] shiny black tromp fudge /jqvwxz iy-a-o-ue
-2820  [253, 493, 721, 942] briny chalk smowt fudge /jpqvxz iy-a-o-ue
-2822  [253, 509, 712, 946] briny swath flock pudge /jmqvxz iy-a-o-ue
-2824  [251, 502, 729, 934] shily frank compt judge /bqvwxz iy-a-o-ue
-2825  [253, 477, 712, 946] briny flack sowth pudge /jmqvxz iy-a-o-ue
-2827  [244, 495, 722, 927] slimy frank botch judge /pqvwxz iy-a-o-ue
-2828  [212, 469, 722, 956] blimy shaft cronk pudge /jqvwxz iy-a-o-ue
-2828  [244, 518, 715, 942] slimy crank fowth budge /jpqvxz iy-a-o-ue
-2832  [253, 493, 725, 946] briny chalk swopt fudge /jmqvxz iy-a-o-ue
+2832  [244, 517, 715, 949] slimy front whack pudge /bjqvxz iy-o-a-ue
 2833  [242, 507, 734, 955] shiny brawl compt fudge /jkqvxz iy-a-o-ue
+2834  [212, 495, 725, 955] showy print black mudge /fjqvxz oy-i-a-ue
 2834  [244, 495, 729, 956] slimy frank potch budge /jqvwxz iy-a-o-ue
+2835  [253, 481, 721, 942] briny smowt chalk fudge /jpqvxz iy-o-a-ue
+2836  [242, 451, 722, 927] shiny block graft muxed /jpqvwz iy-o-a-ue
+2838  [212, 436, 725, 946] showy brick plant fumed /gjqvxz oy-i-a-ue
+2838  [244, 471, 722, 956] slimy botch frank pudge /jqvwxz iy-o-a-ue
 2839  [253, 490, 710, 931] briny shack plotz fudge /jmqvwx iy-a-o-ue
 2840  [244, 508, 735, 956] slimy prank botch fudge /jqvwxz iy-a-o-ue
 2841  [212, 458, 722, 956] blimy shank croft pudge /jqvwxz iy-a-o-ue
 2842  [235, 508, 735, 956] bliny shark compt fudge /jqvwxz iy-a-o-ue
+2842  [253, 488, 712, 946] briny sowth flack pudge /jmqvxz iy-o-a-ue
+2843  [212, 436, 725, 955] showy brick plant mudge /fjqvxz oy-i-a-ue
 2845  [244, 442, 715, 942] slimy whack front budge /jpqvxz iy-a-o-ue
 2846  [253, 515, 712, 917] briny slack fowth judge /mpqvxz iy-a-o-ue
+2848  [253, 523, 721, 942] briny smolt whack fudge /jpqvxz iy-o-a-ue
+2850  [212, 485, 722, 956] blimy front shack pudge /jqvwxz iy-o-a-ue
+2851  [253, 485, 725, 946] briny swopt chalk fudge /jmqvxz iy-o-a-ue
 2854  [212, 449, 722, 927] blimy shack front judge /pqvwxz iy-a-o-ue
+2854  [212, 495, 719, 946] showy print flack budge /jmqvxz oy-i-a-ue
 2858  [244, 495, 722, 956] slimy frank botch pudge /jqvwxz iy-a-o-ue
 2862  [253, 515, 712, 942] briny slack fowth mudge /jpqvxz iy-a-o-ue
+2865  [251, 478, 729, 956] shily compt frank budge /jqvwxz iy-o-a-ue
+2869  [212, 495, 725, 946] showy print black fudge /jmqvxz oy-i-a-ue
+2877  [212, 436, 725, 946] showy brick plant fudge /jmqvxz oy-i-a-ue
 2877  [253, 515, 712, 946] briny slack fowth pudge /jmqvxz iy-a-o-ue
+2879  [244, 517, 715, 942] slimy front whack budge /jpqvxz iy-o-a-ue
 2886  [212, 449, 722, 956] blimy shack front pudge /jqvwxz iy-a-o-ue
 2902  [251, 502, 729, 956] shily frank compt budge /jqvwxz iy-a-o-ue
 ```
@@ -78,7 +78,7 @@ All are good choices; I typically use:
 ```
 2858  [244, 495, 722, 956] slimy frank botch pudge /jqvwxz iy-a-o-ue
 ```
-It scores decently overall, uses four quite normal words, and only "jqvwxz" (the six least frequent letters) are uncovered.  If you're OK with wierd words, shily-frank-compt-budge scores best.
+It scores decently overall, uses four quite normal words, exposes the nearly the most letters, and only "jqvwxz" (the six least frequent letters) are uncovered.  If you're OK with wierd words, shily-frank-compt-budge scores best.
 
 ## Letter Frequencies
 ```
