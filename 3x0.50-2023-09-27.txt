@@ -1,0 +1,282 @@
+
+====== ae-io-uy range=794-821 complexity: 220x288x114=6.9M
+
+====== ae-iu-oy range=790-820 complexity: 220x168x152=5.4M
+
+====== ae-iy-ou range=803-831 complexity: 220x137x243=7.0M
+
+====== ae-ou-iy range=795-816 complexity: 220x243x137=7.0M
+
+====== ae-oy-iu range=791-821 complexity: 220x152x168=5.4M
+
+====== ae-uy-io range=780-810 complexity: 220x114x288=6.9M
+
+====== ai-eo-uy range=786-814 complexity: 521x124x114=7.0M
+
+====== ai-eu-oy range=784-816 complexity: 521x332x152=25.1M
+
+====== ai-ey-ou range=763-788 complexity: 521x199x243=24.0M
+
+====== ai-ou-ey range=754-778 complexity: 521x243x199=24.0M
+
+====== ai-oy-eu range=776-790 complexity: 521x152x332=25.1M
+
+====== ai-uy-eo range=760-795 complexity: 521x114x124=7.0M
+
+====== ao-ei-uy range=773-800 complexity: 457x145x114=7.2M
+
+====== ao-eu-iy range=763-792 complexity: 457x332x137=19.8M
+
+====== ao-ey-iu range=731-758 complexity: 457x199x168=14.6M
+
+====== ao-iu-ey range=727-746 complexity: 457x168x199=14.6M
+
+====== ao-iy-eu range=762-786 complexity: 457x137x332=19.8M
+
+====== ao-uy-ei range=741-762 complexity: 457x114x145=7.2M
+
+====== au-ei-oy range=780-807 complexity: 319x145x152=6.7M
+
+====== au-eo-iy range=773-804 complexity: 319x124x137=5.2M
+
+====== au-ey-io range=741-767 complexity: 319x199x288=17.4M
+
+====== au-io-ey range=739-761 complexity: 319x288x199=17.4M
+
+====== au-iy-eo range=756-792 complexity: 319x137x124=5.2M
+
+====== au-oy-ei range=758-792 complexity: 319x152x145=6.7M
+
+====== ay-ei-ou range=787-816 complexity: 234x145x243=7.9M
+
+====== ay-eo-iu range=774-806 complexity: 234x124x168=4.6M
+
+====== ay-eu-io range=773-802 complexity: 234x332x288=21.3M
+
+====== ay-io-eu range=763-792 complexity: 234x288x332=21.3M
+
+====== ay-iu-eo range=752-775 complexity: 234x168x124=4.6M
+
+====== ay-ou-ei range=763-788 complexity: 234x243x145=7.9M
+
+====== ei-ao-uy range=784-809 complexity: 145x457x114=7.2M
+
+====== ei-au-oy range=787-812 complexity: 145x319x152=6.7M
+
+====== ei-ay-ou range=794-818 complexity: 145x234x243=7.9M
+
+====== ei-ou-ay range=787-805 complexity: 145x243x234=7.9M
+
+====== ei-oy-au range=781-808 complexity: 145x152x319=6.7M
+
+====== ei-uy-ao range=764-787 complexity: 145x114x457=7.2M
+
+====== eo-ai-uy range=787-814 complexity: 124x521x114=7.0M
+
+====== eo-au-iy range=779-810 complexity: 124x319x137=5.2M
+
+====== eo-ay-iu range=784-812 complexity: 124x234x168=4.6M
+
+====== eo-iu-ay range=777-804 complexity: 124x168x234=4.6M
+
+====== eo-iy-au range=777-804 complexity: 124x137x319=5.2M
+
+====== eo-uy-ai range=762-788 complexity: 124x114x521=7.0M
+
+====== eu-ai-oy range=774-804 complexity: 332x521x152=25.1M
+
+====== eu-ao-iy range=763-789 complexity: 332x457x137=19.8M
+
+====== eu-ay-io range=772-807 complexity: 332x234x288=21.3M
+
+====== eu-io-ay range=766-789 complexity: 332x288x234=21.3M
+
+====== eu-iy-ao range=767-793 complexity: 332x137x457=19.8M
+
+====== eu-oy-ai range=761-784 complexity: 332x152x521=25.1M
+
+====== ey-ai-ou range=739-763 complexity: 199x521x243=24.0M
+
+====== ey-ao-iu range=722-744 complexity: 199x457x168=14.6M
+
+====== ey-au-io range=726-751 complexity: 199x319x288=17.4M
+
+====== ey-io-au range=721-756 complexity: 199x288x319=17.4M
+
+====== ey-iu-ao range=717-750 complexity: 199x168x457=14.6M
+
+====== ey-ou-ai range=721-742 complexity: 199x243x521=24.0M
+
+====== io-ae-uy range=768-797 complexity: 288x220x114=6.9M
+
+====== io-au-ey range=726-748 complexity: 288x319x199=17.4M
+
+====== io-ay-eu range=752-783 complexity: 288x234x332=21.3M
+
+====== io-eu-ay range=757-777 complexity: 288x332x234=21.3M
+
+====== io-ey-au range=721-749 complexity: 288x199x319=17.4M
+
+====== io-uy-ae range=737-764 complexity: 288x114x220=6.9M
+
+====== iu-ae-oy range=775-801 complexity: 168x220x152=5.4M
+
+====== iu-ao-ey range=734-757 complexity: 168x457x199=14.6M
+
+====== iu-ay-eo range=756-780 complexity: 168x234x124=4.6M
+
+====== iu-eo-ay range=765-788 complexity: 168x124x234=4.6M
+
+====== iu-ey-ao range=729-761 complexity: 168x199x457=14.6M
+
+====== iu-oy-ae range=750-773 complexity: 168x152x220=5.4M
+
+====== iy-ae-ou range=783-803 complexity: 137x220x243=7.0M
+
+====== iy-ao-eu range=758-779 complexity: 137x457x332=19.8M
+
+====== iy-au-eo range=753-783 complexity: 137x319x124=5.2M
+
+====== iy-eo-au range=764-787 complexity: 137x124x319=5.2M
+
+====== iy-eu-ao range=760-785 complexity: 137x332x457=19.8M
+
+====== iy-ou-ae range=759-776 complexity: 137x243x220=7.0M
+
+====== ou-ae-iy range=769-790 complexity: 243x220x137=7.0M
+
+====== ou-ai-ey range=731-750 complexity: 243x521x199=24.0M
+
+====== ou-ay-ei range=752-775 complexity: 243x234x145=7.9M
+
+====== ou-ei-ay range=766-792 complexity: 243x145x234=7.9M
+
+====== ou-ey-ai range=723-746 complexity: 243x199x521=24.0M
+
+====== ou-iy-ae range=753-777 complexity: 243x137x220=7.0M
+
+====== oy-ae-iu range=772-799 complexity: 152x220x168=5.4M
+
+====== oy-ai-eu range=761-787 complexity: 152x521x332=25.1M
+
+====== oy-au-ei range=747-782 complexity: 152x319x145=6.7M
+
+====== oy-ei-au range=767-792 complexity: 152x145x319=6.7M
+
+====== oy-eu-ai range=757-783 complexity: 152x332x521=25.1M
+
+====== oy-iu-ae range=745-776 complexity: 152x168x220=5.4M
+
+====== uy-ae-io range=752-775 complexity: 114x220x288=6.9M
+
+====== uy-ai-eo range=739-773 complexity: 114x521x124=7.0M
+
+====== uy-ao-ei range=727-764 complexity: 114x457x145=7.2M
+
+====== uy-ei-ao range=740-765 complexity: 114x145x457=7.2M
+
+====== uy-eo-ai range=739-769 complexity: 114x124x521=7.0M
+
+====== uy-io-ae range=734-767 complexity: 114x288x220=6.9M
+
+====== None range=810-831
+810  [353, 614, 814] crane foist bludy /ghjkmpqvwxz ae-io-uy 5 [5, 4, 0]
+810  [353, 630, 830] crane hoist bludy /fgjkmpqvwxz ae-io-uy 5 [5, 4, 0]
+810  [353, 631, 833] crane silty dough /bfjkmpqvwxz ae-iy-ou 5 [5, 2, 1]
+810  [361, 634, 824] slate corny guimp /bdfhjkqvwxz ae-oy-iu 3 [3, 2, 0]
+811  [302, 612, 827] slaty price bound /fghjkmqvwxz ay-ei-ou 4 [0, 2, 4]
+811  [340, 615, 833] trice shaly mound /bfgjkpqvwxz ei-ay-ou 4 [3, 1, 4]
+811  [332, 634, 824] crone slaty guimp /bdfhjkqvwxz eo-ay-iu 2 [2, 0, 0]
+811  [334, 594, 817] shale count privy /bdfgjkmqwxz ae-ou-iy 3 [3, 2, 1]
+811  [334, 585, 837] shale pricy donut /bfgjkmqvwxz ae-iy-ou 3 [3, 2, 0]
+811  [334, 607, 837] shale crony putid /bfgjkmqvwxz ae-oy-iu 3 [3, 1, 0]
+811  [364, 608, 823] trace slimy bound /fghjkpqvwxz ae-iy-ou 4 [2, 0, 4]
+811  [364, 634, 824] crate sonly guimp /bdfhjkqvwxz ae-oy-iu 3 [3, 1, 0]
+811  [353, 631, 824] crane silty bough /dfjkmpqvwxz ae-iy-ou 5 [5, 2, 1]
+811  [361, 626, 808] slate drony quich /bfgjkmpvwxz ae-oy-iu 2 [2, 0, 1]
+812  [312, 617, 815] brine sault choky /dfgjmpqvwxz ei-au-oy 4 [2, 4, 0]
+812  [301, 596, 837] shine praty could /bfgjkmqvwxz ei-ay-ou 2 [1, 0, 2]
+812  [330, 572, 824] grace shiny boult /dfjkmpqvwxz ae-iy-ou 5 [5, 1, 2]
+812  [330, 572, 831] grace shiny poult /bdfjkmqvwxz ae-iy-ou 4 [4, 1, 2]
+812  [327, 578, 815] brace shily fount /dgjkmpqvwxz ae-iy-ou 4 [4, 0, 1]
+812  [332, 581, 830] crone shady built /fgjkmpqvwxz eo-ay-iu 3 [3, 1, 2]
+812  [334, 571, 831] shale primy count /bdfgjkqvwxz ae-iy-ou 3 [3, 1, 1]
+812  [334, 594, 831] shale count gripy /bdfjkmqvwxz ae-ou-iy 4 [4, 2, 1]
+812  [364, 608, 830] trace slimy pound /bfghjkqvwxz ae-iy-ou 4 [2, 1, 4]
+812  [364, 606, 823] trace shiny would /bfgjkmpqvxz ae-iy-ou 2 [2, 1, 1]
+812  [352, 620, 820] share point bludy /cfgjkmqvwxz ae-io-uy 3 [3, 1, 0]
+812  [353, 602, 814] crane built showy /dfgjkmpqvxz ae-iu-oy 5 [5, 2, 1]
+813  [302, 614, 824] slaty brine mouch /dfgjkpqvwxz ay-ei-ou 3 [1, 2, 3]
+813  [302, 614, 824] slaty brine gouch /dfjkmpqvwxz ay-ei-ou 3 [1, 2, 3]
+813  [327, 569, 824] brace shiny moult /dfgjkpqvwxz ae-iy-ou 3 [3, 1, 1]
+813  [317, 612, 821] slice praty found /bghjkmqvwxz ei-ay-ou 4 [2, 0, 4]
+813  [317, 612, 837] slice praty hound /bfgjkmqvwxz ei-ay-ou 4 [2, 0, 4]
+813  [334, 594, 827] shale count grimy /bdfjkpqvwxz ae-ou-iy 4 [4, 1, 1]
+813  [364, 615, 823] trace shily wound /bfgjkmpqvxz ae-iy-ou 4 [2, 0, 4]
+813  [364, 611, 823] crate sound blimy /fghjkpqvwxz ae-ou-iy 4 [4, 4, 1]
+813  [364, 608, 817] crate slimy found /bghjkpqvwxz ae-iy-ou 4 [4, 1, 4]
+813  [364, 608, 833] crate slimy hound /bfgjkpqvwxz ae-iy-ou 4 [4, 1, 4]
+813  [353, 623, 823] crane moist bludy /fghjkpqvwxz ae-io-uy 4 [4, 4, 0]
+813  [361, 612, 814] slate pricy dough /bfjkmnqvwxz ae-iy-ou 3 [3, 2, 1]
+814  [302, 614, 824] slaty brine cough /dfjkmpqvwxz ay-ei-ou 2 [1, 2, 1]
+814  [312, 614, 824] brine slaty mouch /dfgjkpqvwxz ei-ay-ou 3 [2, 1, 3]
+814  [340, 615, 830] trice shaly bound /fgjkmpqvwxz ei-ay-ou 4 [2, 1, 4]
+814  [340, 615, 837] trice shaly pound /bfgjkmqvwxz ei-ay-ou 4 [2, 1, 4]
+814  [327, 578, 824] brace shily mount /dfgjkpqvwxz ae-iy-ou 3 [3, 0, 1]
+814  [327, 599, 823] brace suint godly /fhjkmpqvwxz ae-iu-oy 4 [4, 1, 0]
+814  [332, 630, 831] crone saith plumy /bdfgjkqvwxz eo-ai-uy 3 [3, 2, 1]
+814  [332, 630, 830] crone saith bludy /fgjkmpqvwxz eo-ai-uy 3 [3, 2, 0]
+814  [314, 630, 831] saint chore plumy /bdfgjkqvwxz ai-eo-uy 2 [2, 2, 1]
+814  [314, 630, 830] saint chore bludy /fgjkmpqvwxz ai-eo-uy 2 [2, 1, 0]
+814  [317, 612, 830] slice praty mound /bfghjkqvwxz ei-ay-ou 4 [1, 0, 4]
+814  [334, 602, 837] shale point curdy /bfgjkmqvwxz ae-io-uy 3 [3, 1, 1]
+814  [352, 612, 824] share count blimy /dfgjkpqvwxz ae-ou-iy 4 [4, 1, 1]
+814  [361, 612, 805] slate pricy bough /dfjkmnqvwxz ae-iy-ou 4 [4, 2, 1]
+815  [312, 614, 824] brine slaty gouch /dfjkmpqvwxz ei-ay-ou 3 [2, 1, 3]
+815  [312, 614, 824] brine slaty cough /dfjkmpqvwxz ei-ay-ou 2 [2, 1, 1]
+815  [364, 615, 824] trace shily found /bgjkmpqvwxz ae-iy-ou 4 [2, 0, 4]
+816  [302, 614, 828] slaty brine pouch /dfgjkmqvwxz ay-ei-ou 3 [0, 2, 3]
+816  [314, 617, 815] saint brule choky /dfgjmpqvwxz ai-eu-oy 3 [3, 1, 0]
+816  [334, 594, 831] shale count primy /bdfgjkqvwxz ae-ou-iy 3 [3, 1, 1]
+816  [364, 606, 833] trace shiny mould /bfgjkpqvwxz ae-iy-ou 2 [2, 1, 1]
+816  [364, 599, 824] crate bliny sough /dfjkmpqvwxz ae-iy-ou 5 [5, 2, 1]
+816  [364, 606, 822] crate shiny plouk /bdfgjmqvwxz ae-iy-ou 3 [3, 1, 0]
+816  [353, 612, 824] crane shout blimy /dfgjkpqvwxz ae-ou-iy 4 [4, 1, 1]
+816  [353, 612, 824] crane south blimy /dfgjkpqvwxz ae-ou-iy 4 [4, 1, 1]
+816  [353, 597, 823] crane slimy doubt /fghjkpqvwxz ae-iy-ou 4 [4, 0, 0]
+816  [361, 634, 833] slate crony humid /bfgjkpqvwxz ae-oy-iu 2 [2, 1, 0]
+817  [327, 569, 828] brace shiny poult /dfgjkmqvwxz ae-iy-ou 4 [4, 1, 1]
+817  [317, 612, 827] slice praty bound /fghjkmqvwxz ei-ay-ou 4 [2, 0, 4]
+817  [334, 585, 822] shale pricy fount /bdgjkmqvwxz ae-iy-ou 4 [4, 2, 1]
+817  [364, 615, 833] trace shily mound /bfgjkpqvwxz ae-iy-ou 4 [2, 0, 4]
+817  [364, 608, 823] crate slimy bound /fghjkpqvwxz ae-iy-ou 4 [4, 0, 4]
+817  [353, 632, 830] crane doilt spumy /bfghjkqvwxz ae-io-uy 3 [3, 0, 0]
+817  [353, 597, 818] crane slimy fouth /bdgjkpqvwxz ae-iy-ou 4 [4, 1, 1]
+817  [353, 597, 827] crane slimy tough /bdfjkpqvwxz ae-iy-ou 4 [4, 1, 2]
+818  [312, 614, 828] brine slaty pouch /dfgjkmqvwxz ei-ay-ou 3 [2, 0, 3]
+818  [364, 608, 830] crate slimy pound /bfghjkqvwxz ae-iy-ou 4 [3, 1, 4]
+818  [364, 606, 823] crate shiny would /bfgjkmpqvxz ae-iy-ou 5 [5, 1, 1]
+819  [334, 585, 831] shale pricy mount /bdfgjkqvwxz ae-iy-ou 3 [3, 1, 1]
+819  [364, 615, 823] crate shily wound /bfgjkmpqvxz ae-iy-ou 5 [5, 0, 4]
+819  [361, 612, 820] slate pricy wound /bfghjkmqvxz ae-iy-ou 4 [2, 2, 4]
+819  [361, 614, 810] slate briny vouch /dfgjkmpqwxz ae-iy-ou 3 [2, 2, 3]
+820  [364, 615, 830] trace shily bound /fgjkmpqvwxz ae-iy-ou 4 [2, 0, 4]
+820  [364, 615, 837] trace shily pound /bfgjkmqvwxz ae-iy-ou 4 [2, 0, 4]
+820  [353, 634, 830] crane sluit podgy /bfhjkmqvwxz ae-iu-oy 4 [4, 1, 0]
+820  [361, 614, 816] slate briny dough /cfjkmpqvwxz ae-iy-ou 2 [2, 1, 1]
+821  [334, 602, 837] shale point crudy /bfgjkmqvwxz ae-io-uy 3 [3, 1, 0]
+821  [364, 615, 824] crate shily found /bgjkmpqvwxz ae-iy-ou 5 [5, 0, 4]
+821  [361, 612, 821] slate pricy found /bghjkmqvwxz ae-iy-ou 4 [2, 2, 4]
+821  [361, 634, 824] slate crony guimp /bdfhjkqvwxz ae-oy-iu 3 [3, 1, 0]
+822  [364, 606, 833] crate shiny mould /bfgjkpqvwxz ae-iy-ou 4 [4, 1, 1]
+822  [361, 612, 837] slate pricy hound /bfgjkmqvwxz ae-iy-ou 4 [2, 2, 4]
+823  [364, 615, 833] crate shily mound /bfgjkpqvwxz ae-iy-ou 4 [4, 0, 4]
+823  [361, 612, 830] slate pricy mound /bfghjkqvwxz ae-iy-ou 4 [2, 1, 4]
+824  [353, 604, 830] crane shily doubt /fgjkmpqvwxz ae-iy-ou 5 [5, 0, 0]
+826  [364, 615, 830] crate shily bound /fgjkmpqvwxz ae-iy-ou 5 [5, 0, 4]
+826  [364, 615, 837] crate shily pound /bfgjkmqvwxz ae-iy-ou 4 [4, 0, 4]
+826  [361, 612, 827] slate pricy bound /fghjkmqvwxz ae-iy-ou 4 [2, 2, 4]
+827  [361, 614, 824] slate briny mouch /dfgjkpqvwxz ae-iy-ou 3 [3, 2, 3]
+828  [361, 614, 824] slate briny gouch /dfjkmpqvwxz ae-iy-ou 3 [3, 1, 3]
+828  [361, 614, 824] slate briny cough /dfjkmpqvwxz ae-iy-ou 3 [3, 1, 1]
+831  [361, 614, 828] slate briny pouch /dfgjkmqvwxz ae-iy-ou 3 [3, 2, 3]

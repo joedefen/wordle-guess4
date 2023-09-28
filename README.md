@@ -8,12 +8,16 @@ To find the "best" four "canned" guesses to solve a NY Times **wordle** puzzle a
 
 > To play wordle optimally, you must craft the next word given all the know information and the statistics of remaining possibilities.  This strategy mostly eliminates that time consuming, tedious chore w/o sacrificing losing the game.
 
+Optionally, the "best" three "canned" guesses can be generated.  The trade-offs of using three versus four are:
+* With three, more letters are exposed first, and your chance using fewer guesses improves.
+* But with three, your chance of failing to solve goes up since you are left to your vocabulary and wits after testing only 15 letters (not 20).
+
 **Spoiler Alert.** Most people have favorite first words pulled from computer simulations or trial-and-error. But, using four canned words may make wordle "too easy to solve".  If new to Wordle, then you can use these words as "training wheels", particularly if you try to lower your average tries by looking for opportunities to deviate from the canned words to minimize the average number of guesses.
 
 **Suggested Human Stategy**:
-* by default, play all four canned words and then guess; if you do this, then you will often solve on the 5th try, and if not, on the 6th.
+* by default, play all four [three] canned words and then guess; if you do this, then you will often solve on the 5th or 6th [4th, 5th, or 6th] try.
 * to lower your average attempts significantly:
-  * start guessing the answer when you think it has been narrowed down to one or two words; this typically requires 4 known letters; possibly just 3 if some positions are known and the exposed letters are very helpful.
+  * start guessing the answer when you think it has been narrowed down to one or two words; this typically requires roughly three known letters; knowing positions and consonants help solve with fewer clues.
  * starting to guess too early (e.g. when there are actually more than two possibilites) is the "trap" that loses most games; when you deviate from the canned words, reconsider after the first deviation if it seems you misjudged (and resume the unused canned words).
  * see more tips in the section below, "Additional Some Rules of Thumb".
 
@@ -35,8 +39,9 @@ Without all the gory details, the scoring favors
 * sets of words that expose the most letters sooner rather than later.
 The option, "-x {EXPONENT}" will favor the right slot with higher values of EXPONENT. The default EXPONENT is 2 which strongly favors the right slot.
 
-## Top 30 Results
-Here are the top 30 results.  Using the first row as an example, the columns are:
+## Sample Top 30 Results for Four Words
+Here are the top 30 results with default arguments.
+Using the first row as an example, the columns are:
 * `855` - the adjusted score weighing the factors describe above,
 * `[317, ...]` - in batting average style, the percentages of letters revealed after each word (so 317 means 31.7% after playing the first word, "slice"),
 * `slice` ... bumph - the four canned words
@@ -79,6 +84,42 @@ All are good choices; I typically use:
 2858  [244, 495, 722, 956] slimy frank botch pudge /jqvwxz iy-a-o-ue
 ```
 It scores decently overall, uses four quite normal words, exposes the nearly the most letters, and only "jqvwxz" (the six least frequent letters) are uncovered.  If you're OK with wierd words, shily-frank-compt-budge scores best.
+
+## Sample Top 30 Results for Three Words
+This run is using `bestwords -3 -x0.5`:
+```
+817  [353, 632, 830] crane doilt spumy /bfghjkqvwxz ae-io-uy 3 [3, 0, 0]
+817  [353, 597, 818] crane slimy fouth /bdgjkpqvwxz ae-iy-ou 4 [4, 1, 1]
+817  [353, 597, 827] crane slimy tough /bdfjkpqvwxz ae-iy-ou 4 [4, 1, 2]
+818  [312, 614, 828] brine slaty pouch /dfgjkmqvwxz ei-ay-ou 3 [2, 0, 3]
+818  [364, 608, 830] crate slimy pound /bfghjkqvwxz ae-iy-ou 4 [3, 1, 4]
+818  [364, 606, 823] crate shiny would /bfgjkmpqvxz ae-iy-ou 5 [5, 1, 1]
+819  [334, 585, 831] shale pricy mount /bdfgjkqvwxz ae-iy-ou 3 [3, 1, 1]
+819  [364, 615, 823] crate shily wound /bfgjkmpqvxz ae-iy-ou 5 [5, 0, 4]
+819  [361, 612, 820] slate pricy wound /bfghjkmqvxz ae-iy-ou 4 [2, 2, 4]
+819  [361, 614, 810] slate briny vouch /dfgjkmpqwxz ae-iy-ou 3 [2, 2, 3]
+820  [364, 615, 830] trace shily bound /fgjkmpqvwxz ae-iy-ou 4 [2, 0, 4]
+820  [364, 615, 837] trace shily pound /bfgjkmqvwxz ae-iy-ou 4 [2, 0, 4]
+820  [353, 634, 830] crane sluit podgy /bfhjkmqvwxz ae-iu-oy 4 [4, 1, 0]
+820  [361, 614, 816] slate briny dough /cfjkmpqvwxz ae-iy-ou 2 [2, 1, 1]
+821  [334, 602, 837] shale point crudy /bfgjkmqvwxz ae-io-uy 3 [3, 1, 0]
+821  [364, 615, 824] crate shily found /bgjkmpqvwxz ae-iy-ou 5 [5, 0, 4]
+821  [361, 612, 821] slate pricy found /bghjkmqvwxz ae-iy-ou 4 [2, 2, 4]
+821  [361, 634, 824] slate crony guimp /bdfhjkqvwxz ae-oy-iu 3 [3, 1, 0]
+822  [364, 606, 833] crate shiny mould /bfgjkpqvwxz ae-iy-ou 4 [4, 1, 1]
+822  [361, 612, 837] slate pricy hound /bfgjkmqvwxz ae-iy-ou 4 [2, 2, 4]
+823  [364, 615, 833] crate shily mound /bfgjkpqvwxz ae-iy-ou 4 [4, 0, 4]
+823  [361, 612, 830] slate pricy mound /bfghjkqvwxz ae-iy-ou 4 [2, 1, 4]
+824  [353, 604, 830] crane shily doubt /fgjkmpqvwxz ae-iy-ou 5 [5, 0, 0]
+826  [364, 615, 830] crate shily bound /fgjkmpqvwxz ae-iy-ou 5 [5, 0, 4]
+826  [364, 615, 837] crate shily pound /bfgjkmqvwxz ae-iy-ou 4 [4, 0, 4]
+826  [361, 612, 827] slate pricy bound /fghjkmqvwxz ae-iy-ou 4 [2, 2, 4]
+827  [361, 614, 824] slate briny mouch /dfgjkpqvwxz ae-iy-ou 3 [3, 2, 3]
+828  [361, 614, 824] slate briny gouch /dfjkmpqvwxz ae-iy-ou 3 [3, 1, 3]
+828  [361, 614, 824] slate briny cough /dfjkmpqvwxz ae-iy-ou 3 [3, 1, 1]
+831  [361, 614, 828] slate briny pouch /dfgjkmqvwxz ae-iy-ou 3 [3, 2, 3]
+```
+After using 'SLATE-BRINY-POUCH', you know 83% of the letters (versus 73% with the best four canned words). So, you learn more quickly and have a better chance of solving with fewer guesses (but not necessary less time spent).
 
 ## Letter Frequencies
 ```

@@ -8,6 +8,8 @@ import sys
 from types import SimpleNamespace
 import heapq
 
+NWORDS = 4  # number of words per word set; options may set this to 3
+
 ##############################################################################
 ##   human()
 ##############################################################################
@@ -28,16 +30,18 @@ class Scorer:
     grand_uniq_cnt = 0 # grand total of unique letters in words
     max_uniq_cnt = 0
     word_cnt = 0  # of answers
+    traps = {}
 
     def __init__(self):
         for letter in list('abcdefghijklmnopqrstuvwxyz'):
-            self.letters[letter] = SimpleNamespace(
+            Scorer.letters[letter] = SimpleNamespace(
                     letter=letter,
                     pos_cnts=[0, 0, 0, 0, 0],
                     pos_mults=[0, 0, 0, 0, 0],
                     pos_sum=0,
                     uniq_cnt=0
                 )
+        self.trap_lets = {}
 
     @staticmethod
     def get_singleton():
@@ -46,17 +50,40 @@ class Scorer:
             Scorer.scorer = Scorer()
         return Scorer.scorer
 
-    def add_word(self, word):
+    @staticmethod
+    def _to_trap(word, pos):
+        return word[0:pos] + '.' + word[pos+1:]
+
+    def _get_trap_score(self, word, left=''):
+        score = 0
+        for pos in range(len(word)):
+            if left:
+                cnt = len(BestWords.get_overlap_lets(self.trap_lets[self._to_trap(word, pos)], left))
+                score = max(score, cnt)
+            else:
+                cnt = len(self.trap_lets[self._to_trap(word, pos)])
+                if cnt > 1:
+                    # score += (cnt-1) # total other words
+                    score = max(score, cnt-1)
+        return score
+
+    def add_word(self, word, is_answer):
         """ Add a word to the scoring database."""
         seen = set()
         for pos, letter in enumerate(list(word)):
-            ns = self.letters[letter]
-            ns.pos_cnts[pos] += 1
-            ns.pos_sum += 1
-            if letter not in seen:
-                seen.add(letter)
-                ns.uniq_cnt += 1
-                Scorer.grand_uniq_cnt += 1
+            if is_answer:
+                ns = self.letters[letter]
+                ns.pos_cnts[pos] += 1
+                ns.pos_sum += 1
+                if letter not in seen:
+                    seen.add(letter)
+                    ns.uniq_cnt += 1
+                    Scorer.grand_uniq_cnt += 1
+            # traps consider all words
+            trap = self._to_trap(word, pos)
+            if trap not in self.trap_lets:
+                self.trap_lets[trap] = ''
+            self.trap_lets[trap] += letter
         self.word_cnt += 1
 
     def freeze(self, exponent):
@@ -72,7 +99,7 @@ class Scorer:
                 ns.pos_mults[pos] = mult
 
     def get_scores(self, word):
-        """Get basic scord of word which is how many letters
+        """Get basic score of word which is how many letters
         the work reveals"""
         raw_score = 0
         adj_score = 0
@@ -88,7 +115,7 @@ class Scorer:
 
         return int(round(adj_score)), raw_score
 
-    def dump(self, verbose):
+    def dump(self, verbose, answers):
         """Show the scoring stats"""
         print(f'{self.word_cnt} answer words; {Scorer.grand_uniq_cnt} unique letters')
         print('Showing for each letter:')
@@ -98,7 +125,7 @@ class Scorer:
         print('\nlet  pct   1  2  3  4  5  sum [position-pcts]')
         print(  '=== ====  == == == == ==  ===')
 
-        nses = sorted(self.letters.values(), key= lambda ns: ns.uniq_cnt, reverse=True)
+        nses = sorted(self.letters.values(), key=lambda ns: ns.uniq_cnt, reverse=True)
         for ns in nses:
             pcts = [int(round((100*cnt)/ns.uniq_cnt)) for cnt in ns.pos_cnts]
             pct_strs = [f'{pct:2d}' for pct in pcts]
@@ -108,8 +135,27 @@ class Scorer:
             out = f' {ns.letter}: {(100*ns.uniq_cnt)//Scorer.grand_uniq_cnt:3.1f}%'
             out += f'  {" ".join(pct_strs)} = {sum(pcts):3d}'
             if verbose:
-                out += f'mults: {mults_str}'
+                out += f' mults: {mults_str}'
             print(out)
+
+        traps = sorted(self.trap_lets.keys(), key=lambda t: len(self.trap_lets[t]), reverse=True)
+        print('\nTRAPS:')
+        for row, trap in enumerate(traps):
+            lets = self.trap_lets[trap]
+            if len(lets) < 3:
+                break
+            print(f'{row:>4d}: {trap} {len(lets)} {lets}')
+
+        print(f'short trap-score: {self._get_trap_score("short")}')
+        print(f'chomp trap-score: {self._get_trap_score("chomp")}')
+
+        words = sorted(answers, key=lambda w: self._get_trap_score(w), reverse=True)
+        print('\nTRAP SCORES')
+        for row, word in enumerate(words):
+            score = self._get_trap_score(word)
+            if score < 1:
+                break
+            print(f'{row:>4d}: {word} {score}')
 
 
 class BestWords:
@@ -120,6 +166,7 @@ class BestWords:
         self.answers = None
         self.guesses = None
         self.complexs = {} # keyed by vowel string
+        self.added = set()
 
 
     def get_word_lists(self, opts):
@@ -135,21 +182,22 @@ class BestWords:
         return len(set(list(a) + list(b))) != len(a) + len(b)
 
     @staticmethod
+    def get_overlap_lets(a, b):
+        """ number of overlapping letters in two words. """
+        return ''.join(set(list(a)) & set(list(b)))
+
+    @staticmethod
     def get_overlap(a, b):
         """ number of overlapping letters in two words. """
         return len(set(list(a)) & set(list(b)))
-        #rv = 0
-        #for char in a:
-            #if char in b:
-                #rv += 1
-        #return rv
 
     def _get_words(self, file_path):
         """This reads a set of words in a file into a list of words
         and into a set words (either the set of answers or legal guess)
         """
         words = {}
-        scorer = Scorer.get_singleton() if 'answers' in file_path else None
+        is_answer =  bool('answers' in file_path)
+        scorer = Scorer.get_singleton()
 
         with open(file_path, "r", encoding='utf-8') as file:
             file_contents = file.read()
@@ -160,8 +208,9 @@ class BestWords:
                     wds = line.split()
                     for wd in wds:
                         words[wd] = None
-                        if scorer:
-                            scorer.add_word(wd)
+                        if wd not in self.added:
+                            scorer.add_word(wd, is_answer)
+                            self.added.add(wd)
         if self.opts.verbose:
             print(f'#words = {len(words)} in {file_path}')
         if scorer:
@@ -201,18 +250,18 @@ class BestWords:
         return germs
 
     @staticmethod
-    def store_top(results, item):
-        """ This will store the top 30 items in a set of items. """
-        if len(results) < 30:
+    def store_top(results, item, limit=100):
+        """ This will store the top so many items in a set of items. """
+        if len(results) < limit:
             heapq.heappush(results, item)
         else:
             heapq.heappushpop(results, item)
 
-    def get_some_fours(self, keys_str):
+    def get_word_sets(self, keys_str):
         """TBD"""
         def get_scores(found):
             nonlocal self, scorer, keys_str
-            scores = [0]*8
+            scores = [0]*(2*NWORDS)
             words = found.split()
             adj_score, raw_score = 0, 0
             used_letters = set()
@@ -227,17 +276,22 @@ class BestWords:
                 raw_score += raw
 
                 scores[idx] = adj_score
-                scores[idx+4] = raw_score
+                scores[idx+NWORDS] = raw_score
 
-            return (int(0.20*scores[0]
-                    + 0.20*scores[1]
-                    + 0.20*scores[2]
-                    + 0.40*scores[3]),
+            if NWORDS == 4:
+                return (int(0.20*scores[0]
+                        + 0.20*scores[1]
+                        + 0.20*scores[2]
+                        + 0.40*scores[3]),
+                        scores, found, keys_str)
+            return (int(0.30*scores[0]
+                    + 0.30*scores[1]
+                    + 0.40*scores[2]),
                     scores, found, keys_str)
 
         scorer = Scorer.get_singleton()
         keys = keys_str.split('-')
-        assert len(keys) == 4
+        assert len(keys) == NWORDS
 
         # get the lists of candidate words .. one word list
         # for each of the vowel clusters. Words must:
@@ -245,7 +299,7 @@ class BestWords:
         #   - have 5 unique letters
         # If there are enough words drawing only from the answers,
         # then use those; else draw from the legal guesses.
-        lists = [[], [], [], []]
+        lists = [[]] * NWORDS
         for idx, key in enumerate(keys):
             if len(key) == 5:
                 # if the word is fully specified, accept it
@@ -267,9 +321,9 @@ class BestWords:
                 # print(f'{idx} {key} #{len(words)}')
                 if len(words) >= 100:
                     break
-                
+
         cnts = [len(words) for words in lists]
-        loops = cnts[0]*cnts[1]*cnts[2]*cnts[3]
+        loops = cnts[0]*cnts[1]*cnts[2]*(cnts[3] if NWORDS == 4 else 1)
         cnts_str = 'x'.join(str(cnt) for cnt in cnts)
         self.complexs[keys_str] = f'{cnts_str}={human(loops)}'
 
@@ -282,62 +336,43 @@ class BestWords:
                 if self.overlapped(word0, word1):
                     continue
                 for word2 in lists[2]:
-                    if self.overlapped(word0+word1, word2):
-                        continue
-                    for word3 in lists[3]:
-                        lap = self.get_overlap(word0+word1+word2, word3)
+                    if NWORDS == 4:
+                        if self.overlapped(word0+word1, word2):
+                            continue
+                        for word3 in lists[3]:
+                            lap = self.get_overlap(word0+word1+word2, word3)
+                            if lap > least_overlap:
+                                continue
+                            if lap < least_overlap:
+                                if least_overlap > 2:
+                                    rv = []
+                                least_overlap = lap
+                            found = f'{word0} {word1} {word2} {word3}'
+                            scores = get_scores(found)
+                            self.store_top(rv, scores)
+                    if NWORDS == 3:
+                        lap = self.get_overlap(word0+word1, word2)
                         if lap > least_overlap:
                             continue
                         if lap < least_overlap:
                             if least_overlap > 2:
                                 rv = []
                             least_overlap = lap
-                        found = f'{word0} {word1} {word2} {word3}'
+                        found = f'{word0} {word1} {word2}'
+                        # print('found:', found)
                         scores = get_scores(found)
+                        # print('scores:', scores)
                         self.store_top(rv, scores)
+
             pct = int(100*idx/loops)
             if pct > last_pct:
                 # print(f'{pct}%')
                 last_pct = pct
         return sorted(rv)
 
-    def main(self):
+    @staticmethod
+    def get_four_whichs():
         """TBD"""
-        import argparse
-        parser = argparse.ArgumentParser()
-        parser.add_argument('-x', '--exponent', default=2.0, type=float,
-                help='value to favor letter in right slot [def=2, min=0, max=4]')
-        parser.add_argument('-p', '--pick', default='',
-                            help='substring to match vowel sets')
-        parser.add_argument('-k', '--keys', type=str, default='',
-                            help="specify a-b-c-d to try")
-        parser.add_argument('-e', '--every', action='store_true',
-                            help='do every vowel set, not just priorities')
-        parser.add_argument('-s', '--stats-only', action='store_true',
-                            help='show words stats only')
-        parser.add_argument('-v', '--verbose', action='store_true',
-                            help='show detail / debugging info')
-        
-        sys.stdout.reconfigure(line_buffering=True)
-
-        self.get_word_lists(parser.parse_args())
-        if self.opts.exponent > 2.0:
-            self.opts.exponent = 2.0
-        elif self.opts.exponent < 0.0:
-            self.opts.exponent = 0.0
-            
-        if self.opts.keys:
-            keys = self.opts.keys.split('-')
-            assert len(keys) == 4
-            for key in keys:
-                assert len(key) > 0, (f'key ({repr(key)} of'
-                      f' {repr(self.opts.keys)}) should not be empty')
-
-        if self.opts.verbose:
-            Scorer.get_singleton().dump(self.opts.verbose)
-        if self.opts.stats_only:
-            return
-
         whichs = [
                 # These are the sets of vowels we try
                 # - the second value is whether "priority"
@@ -365,18 +400,91 @@ class BestWords:
             ('iy-o-a-ue', True), # 2879
             ('o-iy-ue-a', False), #
             ('ou-ae-i-y', False), #
-            ('oy-ai-u-e', True), # 
+            ('oy-ai-u-e', True), #
             ('oy-i-a-ue', True), # 2877
             ('oe-y-i-au', False), #
             ('ue-i-a-oy', False), #
             (None, True) # None forces final results
         ]
-        bests = []
-        # this loop prints out a summary for each of the vowel sets
-        # and then the top 30 overall scores
+        return whichs
+
+    @staticmethod
+    def get_three_whichs():
+        """TBD"""
+        triplets = set()
+        def pair(first, second):
+            return f'{second}{first}' if second < first else f'{first}{second}'
+
+        for a in ('a', 'e', 'i', 'o', 'u', 'y'):
+            for b in ('a', 'e', 'i', 'o', 'u', 'y'):
+                for c in ('a', 'e', 'i', 'o', 'u', 'y'):
+                    for d in ('a', 'e', 'i', 'o', 'u', 'y'):
+                        for e in ('a', 'e', 'i', 'o', 'u', 'y'):
+                            for f in ('a', 'e', 'i', 'o', 'u', 'y'):
+                                if len(set([a, b, c, d, e, f])) < 6:
+                                    continue
+                                triplet = f'{pair(a, b)}-{pair(c, d)}-{pair(e, f)}'
+                                if triplet not in triplets:
+                                    triplets.add(triplet)
+        whichs = []
+        for triplet in sorted(triplets):
+            whichs.append((triplet, True))
+        whichs.append((None, True))
+        return whichs
+
+    def main(self):
+        """TBD"""
+        global NWORDS
+        import argparse
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-x', '--exponent', default=2.0, type=float,
+                help='value to favor letter in right slot [def=2, min=0, max=4]')
+        parser.add_argument('-p', '--pick', default='',
+                            help='substring to match vowel sets')
+        parser.add_argument('-k', '--keys', type=str, default='',
+                            help="specify a-b-c-d to try")
+        parser.add_argument('-e', '--every', action='store_true',
+                            help='do every vowel set, not just priorities')
+        parser.add_argument('-s', '--stats-only', action='store_true',
+                            help='show words stats only')
+        parser.add_argument('-3', '--three-words', action='store_true',
+                            help='find sets-of-three (not sets-of-four)')
+        parser.add_argument('-v', '--verbose', action='store_true',
+                            help='show detail / debugging info')
+
+        sys.stdout.reconfigure(line_buffering=True)
+
+        opts = parser.parse_args()
+        if opts.three_words:
+            NWORDS = 3
+
+        self.get_word_lists(opts)
+        if self.opts.exponent > 2.0:
+            self.opts.exponent = 2.0
+        elif self.opts.exponent < 0.0:
+            self.opts.exponent = 0.0
+
         if self.opts.keys:
+            keys = self.opts.keys.split('-')
+            assert len(keys) == 4
+            for key in keys:
+                assert len(key) > 0, (f'key ({repr(key)} of'
+                      f' {repr(self.opts.keys)}) should not be empty')
+        scorer = Scorer.get_singleton()
+
+        if self.opts.verbose or self.opts.stats_only:
+            scorer.dump(True, self.answers)
+        if self.opts.stats_only:
+            return
+
+        whichs = self.get_four_whichs() if NWORDS == 4 else self.get_three_whichs()
+
+        if self.opts.keys:  # optionally replace the vowel specs with one?
             whichs = [(self.opts.keys, True), (None, True)]
-            
+
+        # this loop prints out a summary for each of the vowel specs
+        # and then the top 30 overall scores
+        bests = []
         for keys, priority in whichs:
             doit = priority
             if keys is None or self.opts.every:
@@ -384,7 +492,7 @@ class BestWords:
             elif self.opts.pick:
                 doit = bool(self.opts.pick in keys)
             if doit:
-                rvs = self.get_some_fours(keys) if keys else sorted(bests)
+                rvs = self.get_word_sets(keys) if keys else sorted(bests)
                 complexity = self.complexs.get(keys, '')
                 if len(rvs) < 1:
                     print(f'\n====== {keys} NONE')
@@ -397,13 +505,15 @@ class BestWords:
                         self.store_top(bests, rv)
                         if not self.opts.verbose:
                             continue
-                    total, scores, words, keys_str = rv
-                    uniq = set(list(''.join(words.split()))) # #uniq letters
-                    all = set(list('abcdefghijklmnopqrstuvwxyz')) # #uniq letters
-                    left = '/' + ''.join(sorted(list(all - uniq)))
+                    _, scores, words, keys_str = rv
+                    uniq = set(list(''.join(words.split()))) # uniq letters
+                    every = set(list('abcdefghijklmnopqrstuvwxyz')) # all letters
+                    left = '/' + ''.join(sorted(list(every - uniq)))
+                    trap_scores = [scorer._get_trap_score(w, left) for w in words.split()]
+                    trap_score = max(trap_scores)
                     print(rv[0],
-                        str(scores[0:4]) if self.opts.verbose else '',
-                        scores[4:], words, left, keys_str)
+                        str(scores[0:NWORDS]) if self.opts.verbose else '',
+                        scores[NWORDS:], words, left, keys_str, trap_score, trap_scores)
 
 obj = BestWords()
 obj.main()
